@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ein liebevoller, interaktiver Brief für deine Prinzessin – mit Animation, Tastaturnutzung und Zugänglichkeitsverbesserungen.">
 <title>Meine Prinzessin ❤️❤️💍</title>
 <style>
 *{box-sizing:border-box}
@@ -18,8 +19,9 @@ h1{font-size:clamp(30px,8vw,52px);color:#8d3158}
 .hint{font-family:Arial;color:#8d4965}
 .envelope{
  position:relative;width:min(350px,85vw);height:230px;
- margin:auto;cursor:pointer;filter:drop-shadow(0 15px 18px #9a527055)
+ margin:auto;cursor:pointer;filter:drop-shadow(0 15px 18px #9a527055);
 }
+.envelope:focus{outline:3px solid #ffd9e8;outline-offset:6px}
 .back{
  position:absolute;inset:0;background:#fff1f7;
  border:2px solid #efaac5;border-radius:16px;
@@ -29,19 +31,19 @@ h1{font-size:clamp(30px,8vw,52px);color:#8d3158}
  background:linear-gradient(145deg,#ffe9f2,#f5b4ce);
  clip-path:polygon(0 0,100% 0,50% 100%);
  transform-origin:top;
- transition:1s;
+ transition:transform 1s ease;
 }
 .letter{
  position:absolute;z-index:2;left:8%;right:8%;bottom:5%;height:82%;
  background:white;border-radius:12px;padding:20px;
- box-shadow:0 8px 20px #71334d22;
+ box-shadow:0 8px 20px #71334d22;transition:transform .7s ease;
 }
 .seal{
  position:absolute;z-index:5;left:50%;top:55%;
  transform:translate(-50%,-50%);
  width:62px;height:62px;border-radius:50%;
  display:grid;place-items:center;background:#df5d91;color:white;font-size:27px;
- transition:.5s
+ transition:opacity .5s ease
 }
 .open .flap{transform:rotateX(175deg)}
 .open .letter{transform:translateY(-70px)}
@@ -58,7 +60,7 @@ h2{text-align:center;color:#8d3158;font-size:32px}
 .end{text-align:center;font-size:23px;color:#8d3158;margin-top:25px}
 .heart{
  position:fixed;top:-40px;z-index:20;pointer-events:none;
- animation:fall linear forwards
+ animation:fall linear forwards;will-change:transform,opacity
 }
 @keyframes fall{
  from{transform:translateY(-40px) rotate(0);opacity:0}
@@ -69,6 +71,13 @@ h2{text-align:center;color:#8d3158;font-size:32px}
  from{opacity:0;transform:translateY(25px)}
  to{opacity:1;transform:none}
 }
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+ .flap,.letter,.seal,.show .message{transition:none!important;animation:none!important}
+ .heart{animation:none;display:none}
+}
+/* Small accessibility helpers */
+.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
 </style>
 </head>
 
@@ -76,20 +85,21 @@ h2{text-align:center;color:#8d3158;font-size:32px}
 <div class="wrap" id="page">
 
 <section class="intro">
-<div class="crown">👑</div>
+<div class="crown" aria-hidden="true">👑</div>
 <h1>Meine Prinzessin ❤️❤️💍</h1>
 
-<div class="envelope" id="env">
-<div class="back"></div>
-<div class="letter">❤️💍❤️</div>
-<div class="flap"></div>
-<div class="seal">❤️</div>
+<!-- Envelope: role=button, keyboard accessible -->
+<div class="envelope" id="env" role="button" tabindex="0" aria-pressed="false" aria-label="Brief öffnen für Meine Prinzessin">
+<div class="back" aria-hidden="true"></div>
+<div class="letter" aria-hidden="true">❤️💍❤️</div>
+<div class="flap" aria-hidden="true"></div>
+<div class="seal" aria-hidden="true">❤️</div>
 </div>
 
 <p class="hint">💌 Drück auf den Brief, meine Prinzessin 💌</p>
 </section>
 
-<section class="message">
+<section class="message" id="message" aria-hidden="true">
 <div class="paper">
 
 <h2>Für meine Prinzessin 👑❤️</h2>
@@ -100,55 +110,55 @@ h2{text-align:center;color:#8d3158;font-size:32px}
 
 <strong>Ich liebe dich über alles ❤️</strong>
 
-💍 Seit du in meinem Leben bist, hat sich für mich so vieles verändert ❤️ Du bist für mich nicht einfach nur meine Freundin, sondern du bist der Mensch geworden, der mir unglaublich viel bedeutet ❤️
+<p>💍 Seit du in meinem Leben bist, hat sich für mich so vieles verändert ❤️ Du bist für mich nicht einfach nur meine Freundin, sondern du bist der Mensch geworden, der mir unglaublich viel bedeutet.</p>
 
-❤️ Ich liebe dich für so vieles, dass ich wahrscheinlich niemals alles in Worte fassen könnte 💍 Ich liebe dein Lächeln, dein Lachen, deine Stimme, deine Art und einfach alles, was dich zu dem besonderen Menschen macht, der du bist ❤️
+<p>❤️ Ich liebe dich für so vieles, dass ich wahrscheinlich niemals alles in Worte fassen könnte 💍 Ich liebe dein Lächeln, dein Lachen, deine Stimme, deine Art und einfach alles, was dich zu dem macht, was du bist.</p>
 
-❤️ Ich bin so unglaublich froh, dass ich dich habe 💍 Manchmal denke ich einfach darüber nach, wie glücklich ich mich schätzen kann, dich gefunden zu haben ❤️ Es gibt so viele Menschen auf dieser Welt, aber du bist diejenige, die mein Herz zum Schmelzen bringt 💍
+<p>❤️ Ich bin so unglaublich froh, dass ich dich habe 💍 Manchmal denke ich einfach darüber nach, wie glücklich ich mich schätzen kann, dich gefunden zu haben ❤️ Es gibt so viele Menschen, aber du bist besonders für mich.</p>
 
-💍 Du gibst mir ein Gefühl, das ich nicht einfach beschreiben kann ❤️ Wenn ich bei dir bin, möchte ich manchmal einfach nur die Zeit anhalten, damit dieser Moment niemals aufhört 💍 Deine Nähe gibt mir Sicherheit und Geborgenheit ❤️
+<p>💍 Du gibst mir ein Gefühl, das ich nicht einfach beschreiben kann ❤️ Wenn ich bei dir bin, möchte ich manchmal einfach nur die Zeit anhalten, damit dieser Moment niemals aufhört 💍 Deine Nähe bedeutet mir alles.</p>
 
-❤️ Ich möchte auch, dass du eines ganz sicher weißt 💍 <strong>Ich würde dich niemals betrügen</strong> ❤️ Nicht weil ich Angst davor hätte, dich zu verlieren, sondern weil ich gar keine andere Person möchte ❤️ Du bist alles, was ich brauche 💍
+<p>❤️ Ich möchte auch, dass du eines ganz sicher weißt 💍 <strong>Ich würde dich niemals betrügen</strong> ❤️ Nicht weil ich Angst davor hätte, dich zu verlieren, sondern weil ich gar nicht will, dass dein Vertrauen in mich bricht.</p>
 
-❤️ Für mich bist du nicht einfach jemand, mit dem ich gerade zusammen bin 💍 Du bist jemand, mit dem ich mir noch ganz viele wunderschöne Momente wünsche ❤️ Ich möchte mit dir lachen, weinen, träumen und leben ❤️
+<p>❤️ Für mich bist du nicht einfach jemand, mit dem ich gerade zusammen bin 💍 Du bist jemand, mit dem ich mir noch ganz viele wunderschöne Momente wünsche ❤️ Ich möchte mit dir lachen, weinen und wachsen.</p>
 
-💍 Wenn es dir schlecht geht, möchte ich derjenige sein, bei dem du dich sicher fühlst ❤️ Wenn du einen schlechten Tag hast, möchte ich dich zum Lächeln bringen 💍 Wenn du zweifelst, möchte ich dir zeigen, dass alles gut wird ❤️
+<p>💍 Wenn es dir schlecht geht, möchte ich derjenige sein, bei dem du dich sicher fühlst ❤️ Wenn du einen schlechten Tag hast, möchte ich dich zum Lächeln bringen 💍 Wenn du zweifelst, möchte ich dir Zurückhalt geben.</p>
 
-❤️ Ich möchte, dass du dich bei mir geliebt fühlst 💍 Ich möchte, dass du weißt, dass du mir vertrauen kannst und dass ich dich niemals absichtlich verletzen möchte ❤️ Natürlich bin auch ich nur ein Mensch und kann Fehler machen, aber ich werde alles tun, um sie wieder gutzumachen 💍
+<p>❤️ Ich möchte, dass du dich bei mir geliebt fühlst 💍 Ich möchte, dass du weißt, dass du mir vertrauen kannst und dass ich dich niemals absichtlich verletzen möchte ❤️ Natürlich bin auch ich nicht perfekt, aber ich will an uns arbeiten.</p>
 
-❤️ Du bist für mich meine Prinzessin 👑💍 Du bist mein Lieblingsmensch ❤️ Du bist diejenige, bei der mein Herz schneller schlägt 💍 Du bist diejenige, deren Nachrichten mich zum Lächeln bringen, auch wenn ich einen schlechten Tag habe ❤️
+<p>❤️ Du bist für mich meine Prinzessin 👑💍 Du bist mein Lieblingsmensch ❤️ Du bist diejenige, bei der mein Herz schneller schlägt 💍 Du bist diejenige, deren Nachrichten mich zum Lächeln bringen.</p>
 
-💍 Ich liebe unsere gemeinsamen Momente ❤️ Auch die ganz kleinen 💍 Denn manchmal braucht es gar nichts Besonderes ❤️ Es reicht mir schon, neben dir zu liegen, deine Hand zu halten, dich anzusehen und einfach zu wissen, dass du da bist 💍
+<p>💍 Ich liebe unsere gemeinsamen Momente ❤️ Auch die ganz kleinen 💍 Denn manchmal braucht es gar nichts Besonderes ❤️ Es reicht mir schon, neben dir zu liegen, deine Hand zu halten, dich anzusehen.</p>
 
-❤️ Und falls du irgendwann einmal vergessen solltest, wie viel du mir bedeutest, dann möchte ich, dass du an diesen Brief zurückdenkst 💍 Lies ihn dir wieder durch und erinnere dich daran, dass ich dich mehr liebe, als Worte je ausdrücken können ❤️
+<p>❤️ Und falls du irgendwann einmal vergessen solltest, wie viel du mir bedeutest, dann möchte ich, dass du an diesen Brief zurückdenkst 💍 Lies ihn dir wieder durch und erinnere dich daran, dass du geliebt wirst.</p>
 
-💍 Ich möchte dich nicht nur heute lieben ❤️ Ich möchte dir auch morgen zeigen, wie wichtig du mir bist 💍 Und übermorgen ❤️ Und an jedem weiteren Tag, an dem ich das Glück haben darf, dich an meiner Seite zu haben 💍
+<p>💍 Ich möchte dich nicht nur heute lieben ❤️ Ich möchte dir auch morgen zeigen, wie wichtig du mir bist 💍 Und übermorgen ❤️ Und an jedem weiteren Tag, an dem ich das Glück haben darf, dich an meiner Seite zu haben.</p>
 
-❤️ Ich kann dir nicht versprechen, dass jeder Tag perfekt sein wird 💍 Aber ich kann dir versprechen, dass ich dich nicht einfach aufgeben möchte, wenn es einmal schwierig wird ❤️ Ich möchte mit dir kämpfen, mit dir wachsen und mit dir eine wunderbare Zukunft aufbauen 💍
+<p>❤️ Ich kann dir nicht versprechen, dass jeder Tag perfekt sein wird 💍 Aber ich kann dir versprechen, dass ich dich nicht einfach aufgeben möchte, wenn es einmal schwierig wird ❤️ Ich möchte mit dir durch alles gehen.</p>
 
-❤️ Ich möchte noch so viele schöne Momente mit dir erleben 💍 Noch so viele Umarmungen ❤️ Noch so viele Küsse 💋 Noch so viele gemeinsame Abende 💍 Noch so viele Gespräche bis spät in die Nacht ❤️
+<p>❤️ Ich möchte noch so viele schöne Momente mit dir erleben 💍 Noch so viele Umarmungen ❤️ Noch so viele Küsse 💋 Noch so viele gemeinsame Abende 💍 Noch so viele Gespräche bis spät in die Nacht.</p>
 
-❤️ Ich wünsche mir, dass wir irgendwann auf all diese Momente zurückblicken und sagen können, dass wir uns füreinander entschieden haben 💍 Dass wir uns gegenseitig gehalten haben ❤️ Dass wir niemals aufgegeben haben 💍
+<p>❤️ Ich wünsche mir, dass wir irgendwann auf all diese Momente zurückblicken und sagen können, dass wir uns füreinander entschieden haben 💍 Dass wir uns gegenseitig gehalten haben ❤️ Das ist mein Wunsch.</p>
 
-💍 Du bist ein ganz besonderer Mensch für mich ❤️ Und ich hoffe, dass du niemals daran zweifelst 💍 Ich hoffe, du weißt, dass du geliebt wirst ❤️ Dass du wunderschön bist 💍 Dass du wertvoll bist ❤️
+<p>💍 Du bist ein ganz besonderer Mensch für mich ❤️ Und ich hoffe, dass du niemals daran zweifelst 💍 Ich hoffe, du weißt, dass du geliebt wirst ❤️ Dass du wunderschön bist 💍 Dass du wertvoll bist.</p>
 
-❤️ Du bist <strong>meine Prinzessin</strong> 👑  
-💍 Du bist <strong>mein Lieblingsmensch</strong> ❤️  
-❤️ Du bist <strong>mein Zuhause</strong> 💍  
-💍 Du bist <strong>mein Herz</strong> ❤️  
-❤️ Und du bist diejenige, die ich niemals gegen irgendjemanden eintauschen würde 💍
+<p>❤️ Du bist <strong>meine Prinzessin</strong> 👑  <br>
+💍 Du bist <strong>mein Lieblingsmensch</strong> ❤️  <br>
+❤️ Du bist <strong>mein Zuhause</strong> 💍  <br>
+💍 Du bist <strong>mein Herz</strong> ❤️  <br>
+❤️ Und du bist diejenige, die ich niemals gegen irgendjemanden eintauschen würde ��</p>
 
-❤️ Danke, dass du in mein Leben gekommen bist 💍 Danke für deine Liebe ❤️ Danke für deine Nähe 💍 Danke für jedes Lächeln ❤️ Danke für jede Umarmung 💍 Danke für jeden einzelnen Moment, den ich mit dir teilen darf ❤️
+<p>❤️ Danke, dass du in mein Leben gekommen bist 💍 Danke für deine Liebe ❤️ Danke für deine Nähe 💍 Danke für jedes Lächeln ❤️ Danke für jede Umarmung 💍 Danke für jeden einzelnen Moment.</p>
 
-💍 Und wenn ich dir mit einem einzigen Satz sagen müsste, was du mir bedeutest, dann wäre es dieser ❤️
+<p>💍 Und wenn ich dir mit einem einzigen Satz sagen müsste, was du mir bedeutest, dann wäre es dieser ❤️</p>
 
-<strong>Ich liebe dich über alles, meine Prinzessin 👑❤️💍</strong>
+<p><strong>Ich liebe dich über alles, meine Prinzessin 👑❤️💍</strong></p>
 
-❤️ Ich bin unendlich froh, dich zu haben 💍 Ich werde dich immer wertschätzen ❤️ Ich möchte dich glücklich sehen 💍 Ich möchte für dich da sein ❤️ Und ich möchte dir immer wieder zeigen, wie sehr ich dich liebe ❤️
+<p>❤️ Ich bin unendlich froh, dich zu haben 💍 Ich werde dich immer wertschätzen ❤️ Ich möchte dich glücklich sehen 💍 Ich möchte für dich da sein ❤️ Und ich möchte dir immer wieder zeigen, wie viel du mir bedeutest.</p>
 
-❤️ <strong>Du bist meine Liebe, mein Lieblingsmensch und ein ganz besonderer Teil meines Lebens</strong> ❤️
+<p>❤️ <strong>Du bist meine Liebe, mein Lieblingsmensch und ein ganz besonderer Teil meines Lebens</strong> ❤️</p>
 
-💍 <strong>Ich liebe dich heute ❤️ Ich liebe dich morgen ❤️ Und ich werde jeden einzelnen Moment mit dir schätzen 💍</strong>
+<p>💍 <strong>Ich liebe dich heute ❤️ Ich liebe dich morgen ❤️ Und ich werde jeden einzelnen Moment mit dir schätzen 💍</strong></p>
 
 </div>
 
@@ -158,31 +168,70 @@ h2{text-align:center;color:#8d3158;font-size:32px}
 </section>
 </div>
 
+<noscript>
+<p style="text-align:center;padding:20px;background:#fff1f7;margin:20px;border-radius:8px;color:#8d4965">JavaScript ist deaktiviert. Aktiviere JavaScript, um die interaktive Animation zu sehen.</p>
+</noscript>
+
 <script>
-const env=document.getElementById("env");
-const page=document.getElementById("page");
+// Improve robustness, accessibility and prevent duplicate triggers
+(function(){
+  const env = document.getElementById('env');
+  const page = document.getElementById('page');
+  const message = document.getElementById('message');
+  if(!env || !page || !message) return;
 
-function heart(){
- const h=document.createElement("div");
- h.className="heart";
- h.textContent=["❤️","💕","💗","💖","💞","💓","💘","💝","💍"][Math.floor(Math.random()*9)];
- h.style.left=Math.random()*100+"vw";
- h.style.fontSize=16+Math.random()*22+"px";
- h.style.animationDuration=4+Math.random()*5+"s";
- h.style.setProperty("--x",(Math.random()-.5)*180+"px");
- document.body.appendChild(h);
- setTimeout(()=>h.remove(),10000);
-}
+  let opened = false;
+  let heartTimer = null;
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-env.onclick=()=>{
- env.classList.add("open");
- setTimeout(()=>{
-   page.classList.add("show");
-   for(let i=0;i<25;i++) setTimeout(heart,i*80);
-   const timer=setInterval(heart,350);
-   setTimeout(()=>clearInterval(timer),18000);
- },1000);
-};
+  function createHeart(){
+    if(prefersReduced) return;
+    const h = document.createElement('div');
+    h.className = 'heart';
+    const emojis = ['❤️','💕','💗','💖','💞','💓','💘','💝','💍'];
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    h.style.left = (Math.random()*100) + 'vw';
+    h.style.fontSize = (16 + Math.random()*22) + 'px';
+    h.style.animationDuration = (4 + Math.random()*5) + 's';
+    h.style.setProperty('--x', ((Math.random()-0.5)*180) + 'px');
+    h.setAttribute('aria-hidden','true');
+    // remove on animation end to avoid timeouts lingering
+    h.addEventListener('animationend', ()=>{ if(h && h.parentNode) h.parentNode.removeChild(h); });
+    document.body.appendChild(h);
+  }
+
+  function openEnvelope(){
+    if(opened) return;
+    opened = true;
+    env.classList.add('open');
+    env.setAttribute('aria-pressed','true');
+    env.setAttribute('tabindex','-1'); // no longer focusable
+
+    setTimeout(()=>{
+      page.classList.add('show');
+      message.setAttribute('aria-hidden','false');
+      // small burst
+      for(let i=0;i<25;i++) setTimeout(createHeart, i*80);
+      // steady hearts
+      heartTimer = setInterval(createHeart, 350);
+      setTimeout(()=>{ clearInterval(heartTimer); heartTimer = null; }, 18000);
+    }, 900);
+  }
+
+  // Click handler
+  env.addEventListener('click', openEnvelope);
+  // Keyboard support: Enter / Space
+  env.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+      e.preventDefault();
+      openEnvelope();
+    }
+  });
+
+  // Clean up hearts if user navigates away
+  window.addEventListener('beforeunload', ()=>{ if(heartTimer) clearInterval(heartTimer); });
+
+})();
 </script>
 
 </body>
