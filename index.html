@@ -1,238 +1,272 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ein liebevoller, interaktiver Brief für deine Prinzessin – mit Animation, Tastaturnutzung und Zugänglichkeitsverbesserungen.">
-<title>Meine Prinzessin ❤️❤️💍</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mein Liebesbuch</title>
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;min-height:100vh;overflow-x:hidden;
- font-family:Georgia,serif;color:#71334d;
- background:linear-gradient(135deg,#ffd9e8,#f5a9c9,#ffe1ed);
-}
-.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px}
-.intro{text-align:center}
-h1{font-size:clamp(30px,8vw,52px);color:#8d3158}
-.crown{font-size:50px}
-.hint{font-family:Arial;color:#8d4965}
-.envelope{
- position:relative;width:min(350px,85vw);height:230px;
- margin:auto;cursor:pointer;filter:drop-shadow(0 15px 18px #9a527055);
-}
-.envelope:focus{outline:3px solid #ffd9e8;outline-offset:6px}
-.back{
- position:absolute;inset:0;background:#fff1f7;
- border:2px solid #efaac5;border-radius:16px;
-}
-.flap{
- position:absolute;z-index:3;top:0;left:0;width:100%;height:58%;
- background:linear-gradient(145deg,#ffe9f2,#f5b4ce);
- clip-path:polygon(0 0,100% 0,50% 100%);
- transform-origin:top;
- transition:transform 1s ease;
-}
-.letter{
- position:absolute;z-index:2;left:8%;right:8%;bottom:5%;height:82%;
- background:white;border-radius:12px;padding:20px;
- box-shadow:0 8px 20px #71334d22;transition:transform .7s ease;
-}
-.seal{
- position:absolute;z-index:5;left:50%;top:55%;
- transform:translate(-50%,-50%);
- width:62px;height:62px;border-radius:50%;
- display:grid;place-items:center;background:#df5d91;color:white;font-size:27px;
- transition:opacity .5s ease
-}
-.open .flap{transform:rotateX(175deg)}
-.open .letter{transform:translateY(-70px)}
-.open .seal{opacity:0}
-.message{display:none;max-width:760px;width:100%}
-.show .intro{display:none}
-.show .message{display:block;animation:in 1s}
-.paper{
- background:#fffdfdf2;border-radius:24px;padding:35px;
- box-shadow:0 20px 50px #71334d33
-}
-h2{text-align:center;color:#8d3158;font-size:32px}
-.text{font-size:18px;line-height:1.9}
-.end{text-align:center;font-size:23px;color:#8d3158;margin-top:25px}
-.heart{
- position:fixed;top:-40px;z-index:20;pointer-events:none;
- animation:fall linear forwards;will-change:transform,opacity
-}
-@keyframes fall{
- from{transform:translateY(-40px) rotate(0);opacity:0}
- 10%{opacity:1}
- to{transform:translateY(110vh) translateX(var(--x)) rotate(360deg);opacity:0}
-}
-@keyframes in{
- from{opacity:0;transform:translateY(25px)}
- to{opacity:1;transform:none}
-}
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
- .flap,.letter,.seal,.show .message{transition:none!important;animation:none!important}
- .heart{animation:none;display:none}
-}
-/* Small accessibility helpers */
-.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+  :root{
+    --bg1:#fff6fb;
+    --bg2:#ffeef7;
+    --accent:#b33a5b;
+    --paper:#fff;
+    --shadow: rgba(115,51,77,0.12);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    font-family: "Georgia", serif; background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:#6b2a42;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .container{padding:24px; width:min(1100px,96vw)}
+  h1{margin:0 0 18px 0; text-align:center; font-size:clamp(20px,3vw,32px)}
+
+  /* Book stage */
+  .stage{
+    perspective:1500px;
+    display:flex; justify-content:center;
+  }
+
+  .book{
+    width:880px; max-width:92vw; height:520px; position:relative;
+    transform-style:preserve-3d;
+  }
+
+  /* Page stack */
+  .page{
+    --thickness: 0.6px;
+    position:absolute; inset:0; width:50%; height:100%;
+    left:50%;
+    transform-origin:left center;
+    transform-style:preserve-3d;
+    transition: transform 800ms cubic-bezier(.2,.9,.3,1), box-shadow 300ms;
+    box-shadow: 0 8px 30px var(--shadow);
+    border-radius:10px;
+    overflow:hidden;
+    background:transparent;
+    cursor:pointer;
+  }
+
+  /* Back face when flipped */
+  .page .front, .page .back{
+    position:absolute; inset:0; backface-visibility:hidden;
+    background:var(--paper); padding:28px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+
+  .page .back{ transform:rotateY(180deg); }
+
+  /* positioning so left and right pages show like a book */
+  .page.left{ left:0; transform-origin:right center; }
+  .page.right{ left:50%; transform-origin:left center; }
+
+  /* When a page is flipped */
+  .page.flipped{ transform: rotateY(-180deg); z-index:1; }
+
+  /* Make sure later pages sit on top */
+  .page[data-index]{ z-index: calc(100 - var(--i)); }
+
+  /* Paper style */
+  .paper-title{ font-size:20px; text-align:center; color:var(--accent) }
+  .paper-content{ flex:1; font-size:18px; line-height:1.7; overflow:auto; padding-right:8px }
+  .paper-img{ width:100%; height:260px; object-fit:cover; border-radius:8px; box-shadow:0 6px 22px rgba(0,0,0,0.12) }
+
+  /* controls */
+  .controls{ display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:12px }
+  .btn{
+    background:linear-gradient(180deg,#fff,#ffdfe8); border:1px solid #f2aec3; color:var(--accent);
+    padding:10px 14px; border-radius:8px; font-weight:600; cursor:pointer;
+    box-shadow:0 6px 18px rgba(115,51,77,0.06);
+  }
+  .btn:disabled{ opacity:.45; cursor:not-allowed }
+
+  /* page indicator */
+  .pager{ font-size:14px; color:#8a435a }
+
+  /* small screens: stack */
+  @media (max-width:900px){
+    .book{ height:600px }
+    .page{ width:100%; left:0; transform-origin:center center }
+    .page.right{ left:0 }
+    .page.flipped{ transform: rotateX(-8deg) rotateY(-180deg) translateZ(0) }
+  }
+
+  /* reduced motion: no flipping */
+  @media (prefers-reduced-motion: reduce){
+    .page, .page .front, .page .back{ transition:none !important; animation:none !important }
+  }
+
+  /* accessibility helpers */
+  .visually-hidden{ position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap }
 </style>
 </head>
-
 <body>
-<div class="wrap" id="page">
+  <div class="container">
+    <h1>Mein Liebesbuch</h1>
 
-<section class="intro">
-<div class="crown" aria-hidden="true">👑</div>
-<h1>Meine Prinzessin ❤️❤️💍</h1>
+    <div class="stage" aria-label="Liebesbuch" role="application">
+      <div class="book" id="book">
+        <!-- Pages will be generated by JS for clarity; fallback content for no-JS users below -->
+        <noscript>
+          <div style="padding:24px;border-radius:12px;background:#fff;border:1px solid #ffd9e8">
+            Dieses interaktive Buch benötigt JavaScript. Bitte aktiviere JavaScript, um es anzusehen.
+          </div>
+        </noscript>
+      </div>
+    </div>
 
-<!-- Envelope: role=button, keyboard accessible -->
-<div class="envelope" id="env" role="button" tabindex="0" aria-pressed="false" aria-label="Brief öffnen für Meine Prinzessin">
-<div class="back" aria-hidden="true"></div>
-<div class="letter" aria-hidden="true">❤️💍❤️</div>
-<div class="flap" aria-hidden="true"></div>
-<div class="seal" aria-hidden="true">❤️</div>
-</div>
-
-<p class="hint">💌 Drück auf den Brief, meine Prinzessin 💌</p>
-</section>
-
-<section class="message" id="message" aria-hidden="true">
-<div class="paper">
-
-<h2>Für meine Prinzessin 👑❤️</h2>
-
-<div class="text">
-
-❤️ Wenn du diesen Brief öffnest, möchte ich dir etwas sagen, was vielleicht gar nicht oft genug gesagt werden kann ❤️
-
-<strong>Ich liebe dich über alles ❤️</strong>
-
-<p>💍 Seit du in meinem Leben bist, hat sich für mich so vieles verändert ❤️ Du bist für mich nicht einfach nur meine Freundin, sondern du bist der Mensch geworden, der mir unglaublich viel bedeutet.</p>
-
-<p>❤️ Ich liebe dich für so vieles, dass ich wahrscheinlich niemals alles in Worte fassen könnte 💍 Ich liebe dein Lächeln, dein Lachen, deine Stimme, deine Art und einfach alles, was dich zu dem macht, was du bist.</p>
-
-<p>❤️ Ich bin so unglaublich froh, dass ich dich habe 💍 Manchmal denke ich einfach darüber nach, wie glücklich ich mich schätzen kann, dich gefunden zu haben ❤️ Es gibt so viele Menschen, aber du bist besonders für mich.</p>
-
-<p>💍 Du gibst mir ein Gefühl, das ich nicht einfach beschreiben kann ❤️ Wenn ich bei dir bin, möchte ich manchmal einfach nur die Zeit anhalten, damit dieser Moment niemals aufhört 💍 Deine Nähe bedeutet mir alles.</p>
-
-<p>❤️ Ich möchte auch, dass du eines ganz sicher weißt 💍 <strong>Ich würde dich niemals betrügen</strong> ❤️ Nicht weil ich Angst davor hätte, dich zu verlieren, sondern weil ich gar nicht will, dass dein Vertrauen in mich bricht.</p>
-
-<p>❤️ Für mich bist du nicht einfach jemand, mit dem ich gerade zusammen bin 💍 Du bist jemand, mit dem ich mir noch ganz viele wunderschöne Momente wünsche ❤️ Ich möchte mit dir lachen, weinen und wachsen.</p>
-
-<p>💍 Wenn es dir schlecht geht, möchte ich derjenige sein, bei dem du dich sicher fühlst ❤️ Wenn du einen schlechten Tag hast, möchte ich dich zum Lächeln bringen 💍 Wenn du zweifelst, möchte ich dir Zurückhalt geben.</p>
-
-<p>❤️ Ich möchte, dass du dich bei mir geliebt fühlst 💍 Ich möchte, dass du weißt, dass du mir vertrauen kannst und dass ich dich niemals absichtlich verletzen möchte ❤️ Natürlich bin auch ich nicht perfekt, aber ich will an uns arbeiten.</p>
-
-<p>❤️ Du bist für mich meine Prinzessin 👑💍 Du bist mein Lieblingsmensch ❤️ Du bist diejenige, bei der mein Herz schneller schlägt 💍 Du bist diejenige, deren Nachrichten mich zum Lächeln bringen.</p>
-
-<p>💍 Ich liebe unsere gemeinsamen Momente ❤️ Auch die ganz kleinen 💍 Denn manchmal braucht es gar nichts Besonderes ❤️ Es reicht mir schon, neben dir zu liegen, deine Hand zu halten, dich anzusehen.</p>
-
-<p>❤️ Und falls du irgendwann einmal vergessen solltest, wie viel du mir bedeutest, dann möchte ich, dass du an diesen Brief zurückdenkst 💍 Lies ihn dir wieder durch und erinnere dich daran, dass du geliebt wirst.</p>
-
-<p>💍 Ich möchte dich nicht nur heute lieben ❤️ Ich möchte dir auch morgen zeigen, wie wichtig du mir bist 💍 Und übermorgen ❤️ Und an jedem weiteren Tag, an dem ich das Glück haben darf, dich an meiner Seite zu haben.</p>
-
-<p>❤️ Ich kann dir nicht versprechen, dass jeder Tag perfekt sein wird 💍 Aber ich kann dir versprechen, dass ich dich nicht einfach aufgeben möchte, wenn es einmal schwierig wird ❤️ Ich möchte mit dir durch alles gehen.</p>
-
-<p>❤️ Ich möchte noch so viele schöne Momente mit dir erleben 💍 Noch so viele Umarmungen ❤️ Noch so viele Küsse 💋 Noch so viele gemeinsame Abende 💍 Noch so viele Gespräche bis spät in die Nacht.</p>
-
-<p>❤️ Ich wünsche mir, dass wir irgendwann auf all diese Momente zurückblicken und sagen können, dass wir uns füreinander entschieden haben 💍 Dass wir uns gegenseitig gehalten haben ❤️ Das ist mein Wunsch.</p>
-
-<p>💍 Du bist ein ganz besonderer Mensch für mich ❤️ Und ich hoffe, dass du niemals daran zweifelst 💍 Ich hoffe, du weißt, dass du geliebt wirst ❤️ Dass du wunderschön bist 💍 Dass du wertvoll bist.</p>
-
-<p>❤️ Du bist <strong>meine Prinzessin</strong> 👑  <br>
-💍 Du bist <strong>mein Lieblingsmensch</strong> ❤️  <br>
-❤️ Du bist <strong>mein Zuhause</strong> 💍  <br>
-💍 Du bist <strong>mein Herz</strong> ❤️  <br>
-❤️ Und du bist diejenige, die ich niemals gegen irgendjemanden eintauschen würde ��</p>
-
-<p>❤️ Danke, dass du in mein Leben gekommen bist 💍 Danke für deine Liebe ❤️ Danke für deine Nähe 💍 Danke für jedes Lächeln ❤️ Danke für jede Umarmung 💍 Danke für jeden einzelnen Moment.</p>
-
-<p>💍 Und wenn ich dir mit einem einzigen Satz sagen müsste, was du mir bedeutest, dann wäre es dieser ❤️</p>
-
-<p><strong>Ich liebe dich über alles, meine Prinzessin 👑❤️💍</strong></p>
-
-<p>❤️ Ich bin unendlich froh, dich zu haben 💍 Ich werde dich immer wertschätzen ❤️ Ich möchte dich glücklich sehen 💍 Ich möchte für dich da sein ❤️ Und ich möchte dir immer wieder zeigen, wie viel du mir bedeutest.</p>
-
-<p>❤️ <strong>Du bist meine Liebe, mein Lieblingsmensch und ein ganz besonderer Teil meines Lebens</strong> ❤️</p>
-
-<p>💍 <strong>Ich liebe dich heute ❤️ Ich liebe dich morgen ❤️ Und ich werde jeden einzelnen Moment mit dir schätzen 💍</strong></p>
-
-</div>
-
-<div class="end">Für immer dein ❤️💍</div>
-
-</div>
-</section>
-</div>
-
-<noscript>
-<p style="text-align:center;padding:20px;background:#fff1f7;margin:20px;border-radius:8px;color:#8d4965">JavaScript ist deaktiviert. Aktiviere JavaScript, um die interaktive Animation zu sehen.</p>
-</noscript>
+    <div class="controls" aria-hidden="false">
+      <button class="btn" id="prev" aria-label="Zurückblättern">◀ Zurück</button>
+      <div class="pager" id="pager" aria-live="polite">Seite 1 / 6</div>
+      <button class="btn" id="next" aria-label="Weiterblättern">Weiter ▶</button>
+    </div>
+  </div>
 
 <script>
-// Improve robustness, accessibility and prevent duplicate triggers
 (function(){
-  const env = document.getElementById('env');
-  const page = document.getElementById('page');
-  const message = document.getElementById('message');
-  if(!env || !page || !message) return;
+  // Pages data (replace image URLs / text as you like)
+  const pages = [
+    {title:"Für dich, meine Liebe", img:"https://picsum.photos/seed/love1/1200/800", text:"Mein Herz, dieses Buch ist nur für dich. Jeder Seite steht für ein kleines Stück von dem, was du mir bedeutest."},
+    {title:"Dein Lächeln", img:"https://picsum.photos/seed/love2/1200/800", text:"Dein Lächeln erhellt Tage und macht alles leichter. Du bringst Sonne in mein Leben."},
+    {title:"Gemeinsame Erinnerungen", img:"https://picsum.photos/seed/love3/1200/800", text:"Die Momente mit dir sind kostbar – die kleinen Gesten, die vertrauten Blicke, jeder Augenblick zählt."},
+    {title:"Versprechen", img:"https://picsum.photos/seed/love4/1200/800", text:"Ich verspreche, dich zu respektieren, dir zuzuhören und bei dir zu sein – in guten wie in schweren Zeiten."},
+    {title:"Wünsche", img:"https://picsum.photos/seed/love5/1200/800", text:"Ich wünsche mir, mit dir die Welt zu entdecken, gemeinsam zu wachsen und immer füreinander da zu sein."},
+    {title:"Für immer dein", img:"https://picsum.photos/seed/love6/1200/800", text:"An jedem weiteren Tag werde ich dich schätzen. Du bist mein Zuhause, meine Prinzessin, mein Herz."}
+  ];
 
-  let opened = false;
-  let heartTimer = null;
-  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const book = document.getElementById('book');
+  const pager = document.getElementById('pager');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
 
-  function createHeart(){
-    if(prefersReduced) return;
-    const h = document.createElement('div');
-    h.className = 'heart';
-    const emojis = ['❤️','💕','💗','💖','💞','💓','💘','💝','💍'];
-    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    h.style.left = (Math.random()*100) + 'vw';
-    h.style.fontSize = (16 + Math.random()*22) + 'px';
-    h.style.animationDuration = (4 + Math.random()*5) + 's';
-    h.style.setProperty('--x', ((Math.random()-0.5)*180) + 'px');
-    h.setAttribute('aria-hidden','true');
-    // remove on animation end to avoid timeouts lingering
-    h.addEventListener('animationend', ()=>{ if(h && h.parentNode) h.parentNode.removeChild(h); });
-    document.body.appendChild(h);
+  if(!book) return;
+
+  // Build pages DOM: We create one "leaf" per page and place them stacked.
+  // Each page is a right-side leaf by default; visually it acts like single pages in a flipbook.
+  pages.forEach((p, i)=>{
+    const page = document.createElement('div');
+    page.className = 'page right';
+    page.dataset.index = i+1;
+    // custom property for z-ordering in CSS calc
+    page.style.setProperty('--i', i);
+    page.setAttribute('role','button');
+    page.setAttribute('tabindex','0');
+    page.setAttribute('aria-label', `Seite ${i+1}: ${p.title}`);
+    page.innerHTML = `
+      <div class="front" aria-hidden="false">
+        <div class="paper-title">${p.title}</div>
+        <img class="paper-img" src="${p.img}" alt="${p.title} - Bild ${i+1}">
+        <div class="paper-content">${p.text}</div>
+      </div>
+      <div class="back" aria-hidden="true">
+        <div style="margin:auto;text-align:center;font-size:20px;color:var(--accent)">
+          <div style="font-size:48px;line-height:1">❤</div>
+          <div style="margin-top:8px">Seite ${i+1}</div>
+        </div>
+      </div>
+    `;
+    book.appendChild(page);
+  });
+
+  let current = 0; // number of pages turned
+  const total = pages.length;
+
+  const pageElements = Array.from(book.querySelectorAll('.page')).reverse();
+  // reverse so that front-most element is sub[0] for easy stacking control
+
+  function render(){
+    pager.textContent = `Seite ${Math.min(current+1,total)} / ${total}`;
+    prevBtn.disabled = current <= 0;
+    nextBtn.disabled = current >= total-1;
+
+    // for each page: if its index <= current -> flipped
+    pageElements.forEach((el, idx)=>{
+      const pageIndex = total - idx - 1; // original index
+      if(pageIndex <= current - 1){
+        el.classList.add('flipped');
+        el.querySelector('.front')?.setAttribute('aria-hidden','true');
+        el.querySelector('.back')?.setAttribute('aria-hidden','false');
+      }else{
+        el.classList.remove('flipped');
+        el.querySelector('.front')?.setAttribute('aria-hidden','false');
+        el.querySelector('.back')?.setAttribute('aria-hidden','true');
+      }
+      // update tabindex so only next flippable page is reachable
+      if(pageIndex === current){
+        el.setAttribute('tabindex','0');
+      }else{
+        el.setAttribute('tabindex','-1');
+      }
+    });
   }
 
-  function openEnvelope(){
-    if(opened) return;
-    opened = true;
-    env.classList.add('open');
-    env.setAttribute('aria-pressed','true');
-    env.setAttribute('tabindex','-1'); // no longer focusable
-
-    setTimeout(()=>{
-      page.classList.add('show');
-      message.setAttribute('aria-hidden','false');
-      // small burst
-      for(let i=0;i<25;i++) setTimeout(createHeart, i*80);
-      // steady hearts
-      heartTimer = setInterval(createHeart, 350);
-      setTimeout(()=>{ clearInterval(heartTimer); heartTimer = null; }, 18000);
-    }, 900);
+  function go(n){
+    current = Math.max(0, Math.min(total-1, n));
+    render();
   }
 
-  // Click handler
-  env.addEventListener('click', openEnvelope);
-  // Keyboard support: Enter / Space
-  env.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
-      e.preventDefault();
-      openEnvelope();
+  // Click handlers: clicking the visible page flips forward; clicking left area flips back
+  book.addEventListener('click', (e)=>{
+    const rect = book.getBoundingClientRect();
+    const x = e.clientX - rect.left; // relative x within book
+    if(window.matchMedia('(max-width:900px)').matches){
+      // on small screens: tap advances
+      go(current + 1);
+      return;
+    }
+    // If clicked left half, go back; right half, go forward
+    if(x < rect.width/2) go(current - 1);
+    else go(current + 1);
+  });
+
+  // Keyboard controls
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight' || e.key === 'Right'){
+      go(current + 1);
+    }else if(e.key === 'ArrowLeft' || e.key === 'Left'){
+      go(current - 1);
+    }else if(e.key === 'Home'){
+      go(0);
+    }else if(e.key === 'End'){
+      go(total - 1);
     }
   });
 
-  // Clean up hearts if user navigates away
-  window.addEventListener('beforeunload', ()=>{ if(heartTimer) clearInterval(heartTimer); });
+  prevBtn.addEventListener('click', ()=>go(current - 1));
+  nextBtn.addEventListener('click', ()=>go(current + 1));
+
+  // Touch: swipe support
+  let touchStartX = null;
+  book.addEventListener('touchstart', (e)=>{
+    if(e.touches && e.touches[0]) touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+  book.addEventListener('touchend', (e)=>{
+    if(touchStartX == null) return;
+    const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : null;
+    if(endX == null) return;
+    const dx = endX - touchStartX;
+    if(Math.abs(dx) > 40){
+      if(dx < 0) go(current + 1);
+      else go(current - 1);
+    }
+    touchStartX = null;
+  });
+
+  // Initialize
+  go(0);
+
+  // Announce changes for screen readers
+  const live = document.createElement('div');
+  live.className = 'visually-hidden';
+  live.setAttribute('aria-live','polite');
+  document.body.appendChild(live);
+  const obs = new MutationObserver(()=>{ live.textContent = `Seite ${Math.min(current+1,total)} von ${total}`; });
+  obs.observe(pager, {childList:true, characterData:true, subtree:true});
 
 })();
 </script>
-
 </body>
 </html>
