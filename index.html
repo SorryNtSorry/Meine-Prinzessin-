@@ -3,414 +3,288 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="theme-color" content="#ffdfee" />
-<title>Mein Liebesbuch — Für meine Prinzessin</title>
+<title>Mein Liebesbuch — Textansicht (mobil-optimiert)</title>
 <style>
   :root{
-    --bg1: #fff7fb;
-    --bg2: #ffeaf3;
-    --accent: #9b2b55;
-    --accent-2: #e25a86;
-    --paper: linear-gradient(180deg,#fff0f6,#ffe9f2);
-    --paper-edge: #ffdfe8;
-    --text: #5b2340;
-    --shadow: rgba(123,43,73,0.14);
+    --bg:#fff6fb;
+    --panel:#fff1f7;
+    --accent:#b33a5b;
+    --text:#5b2340;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-    font-family: "Georgia", "Times New Roman", serif;
-    background: radial-gradient(1200px 500px at 10% 10%,rgba(226,90,134,0.06),transparent 10%),
-                radial-gradient(900px 400px at 90% 90%,rgba(154,47,86,0.05),transparent 10%),
-                linear-gradient(180deg,var(--bg1),var(--bg2));
-    color:var(--text);
-    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-    padding:18px;
+    margin:0; font-family: Georgia,serif; background:linear-gradient(180deg,var(--bg),#ffeef7);
+    color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    display:flex; align-items:center; justify-content:center; padding:18px;
   }
 
-  .container{width:min(1100px,98vw); margin:auto}
-  h1{margin:0 0 12px 0; text-align:center; font-size:clamp(20px,4vw,34px); color:var(--accent-2)}
+  .wrap{ width:min(920px,100%); max-width:980px; margin:auto; display:flex; flex-direction:column; gap:12px; align-items:center; }
 
-  /* Stage & Book */
-  .stage{ perspective:1400px; display:flex; justify-content:center }
-  .book{
-    width:920px; max-width:98vw; height:640px; max-height:86vh;
-    position:relative; transform-style:preserve-3d; margin:auto;
-    border-radius:16px; padding:18px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,245,250,0.9));
-    box-shadow: 0 20px 50px var(--shadow);
-    border: 1px solid var(--paper-edge);
+  h1{ margin:0; font-size:clamp(18px,3.6vw,28px); color:var(--accent); text-align:center }
+
+  /* viewport for pages: always center and show one page in full */
+  .viewport{
+    width:100%; max-width:760px; height:min(78vh,860px);
+    background:var(--panel); border-radius:14px; padding:18px;
+    box-shadow: 0 20px 40px rgba(120,40,70,0.08);
+    overflow:hidden; position:relative;
   }
 
-  /* Page (left/right) */
+  /* pages row: slides */
+  .pages{
+    display:flex; height:100%; transition:transform 450ms cubic-bezier(.2,.9,.3,1);
+    will-change:transform;
+  }
+
   .page{
-    position:absolute; inset:0; width:50%; height:100%;
-    left:50%; transform-origin:left center; transform-style:preserve-3d;
-    transition: transform 700ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms;
-    border-radius:12px; overflow:hidden; background:transparent; cursor:pointer;
-  }
-  .page .front, .page .back{
-    position:absolute; inset:0; backface-visibility:hidden;
-    border-radius:12px; padding:20px 26px; display:flex; flex-direction:column; gap:12px;
-    background: var(--paper);
-    box-shadow: inset 0 6px 18px rgba(255,255,255,0.6);
-  }
-  .page .back{ transform:rotateY(180deg); display:flex; align-items:center; justify-content:center; }
-
-  .page.left{ left:0; transform-origin:right center; }
-  .page.right{ left:50%; transform-origin:left center; }
-
-  .page.flipped{ transform: rotateY(-180deg); z-index:1; box-shadow: 0 14px 36px rgba(100,30,60,0.12); }
-
-  .page[data-index]{ z-index: calc(200 - var(--i)); }
-
-  /* Header/illustration */
-  .paper-header{ display:flex; gap:14px; align-items:center; justify-content:center; }
-  .paper-title{ font-size:18px; font-weight:700; text-align:center; color:var(--accent) }
-  .paper-illustration{ width:96px; height:64px; flex-shrink:0; display:block }
-
-  /* Content */
-  .paper-content{ flex:1; font-size:18px; line-height:1.72; color:var(--text); padding-right:8px; overflow:hidden; }
-  .paper-content .para{ margin:10px 0; word-break:break-word; hyphens:auto; }
-  .paper-content .para strong{ font-weight:800; color:var(--accent-2); }
-
-  /* small note below page (unused but safe) */
-  .page-foot{ text-align:center; font-size:13px; color:#8a435a }
-
-  /* separators use hearts & rings */
-  .sep{ display:inline-block; margin-left:8px; color:#d25a86; font-size:18px; vertical-align:middle }
-
-  /* Controls */
-  .controls{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; gap:12px; max-width:920px; margin-left:auto; margin-right:auto }
-  .btn{
-    background: linear-gradient(180deg,#fff,#ffeef6); border:1px solid #f2b0cc; color:var(--accent);
-    padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; font-size:15px;
-    box-shadow: 0 8px 20px rgba(140,40,70,0.07);
-  }
-  .btn:disabled{ opacity:.5; cursor:not-allowed }
-  .pager{ font-size:14px; color:#8a435a; text-align:center; flex:1 }
-
-  /* Responsive: on small screens show single "page" full width and bigger text */
-  @media (max-width:900px){
-    .book{ height:86vh; padding:14px }
-    .page{ width:100%; left:0; transform-origin:center center; }
-    .paper-illustration{ width:84px; height:56px }
-    .paper-content{ font-size:20px; line-height:1.7; overflow:auto; padding-right:6px }
-    .paper-title{ font-size:20px }
-    .controls{ padding:6px 0 }
-    .btn{ padding:10px 12px; font-size:16px }
+    flex:0 0 100%; /* full width slide */
+    padding:6px 12px 18px 12px;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
   }
 
-  /* Reduced motion: keep interactions but remove heavy animations */
+  .page-inner{
+    width:100%; max-width:640px; margin:0 auto; /* center content inside page */
+    padding:12px 18px; background:linear-gradient(180deg,#fff,#fff7fb);
+    border-radius:10px; box-shadow: inset 0 2px 10px rgba(180,90,120,0.03);
+  }
+
+  .page h2{ margin:6px 0 12px 0; font-size:20px; color:var(--accent); text-align:center }
+  .page p{ margin:12px 0; font-size:18px; line-height:1.7; color:var(--text) }
+
+  /* controls */
+  .controls{ width:100%; max-width:760px; display:flex; gap:8px; justify-content:space-between; align-items:center }
+  .btn{ background:linear-gradient(180deg,#fff,#ffeef6); border:1px solid #f2afc8; color:var(--accent); padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer }
+  .btn:disabled{ opacity:.45; cursor:not-allowed }
+  .pager{ font-size:14px; color:#8a435a }
+
+  /* mobile adjustments */
+  @media (max-width:640px){
+    .viewport{ padding:12px; height:84vh; border-radius:12px }
+    .page-inner{ padding:12px; }
+    .page p{ font-size:20px; line-height:1.65 }
+    .btn{ padding:10px 12px; font-size:15px }
+  }
+
+  /* reduced motion */
   @media (prefers-reduced-motion: reduce){
-    .page, .page .front, .page .back{ transition:none !important; animation:none !important }
-    .floating{ display:none }
+    .pages{ transition:none }
   }
 
-  /* decorative floating emojis */
-  .floating{ position:fixed; pointer-events:none; z-index:60; top:-80px; font-size:26px; animation:floatDown linear forwards; opacity:0; transform-origin:center; }
-  @keyframes floatDown{
-    from{ transform:translateY(-80px) rotate(0deg); opacity:0; }
-    10%{ opacity:1; }
-    to{ transform:translateY(110vh) translateX(var(--x)) rotate(360deg); opacity:0; }
-  }
-
-  .visually-hidden{ position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap }
-
-  /* measurement helper (hidden) */
-  .measure { position:absolute; visibility:hidden; left:-9999px; top:0; width:420px; height:360px; overflow:auto; }
+  .visually-hidden{ position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Mein Liebesbuch — Für meine Prinzessin</h1>
+  <div class="wrap">
+    <h1>Mein Liebesbuch — Lesbare Textansicht</h1>
 
-    <div class="stage" aria-label="Liebesbuch" role="application">
-      <div class="book" id="book" aria-live="polite">
-        <noscript>
-          <div style="padding:18px;border-radius:12px;background:#fff;border:1px solid #ffd9e8">
-            Dieses interaktive Buch benötigt JavaScript. Bitte aktiviere JavaScript, um es anzusehen.
-          </div>
-        </noscript>
+    <div class="viewport" id="viewport" aria-live="polite">
+      <div class="pages" id="pages" role="document" aria-label="Seiten des Buchs">
+        <!-- pages populated by JS -->
       </div>
     </div>
 
-    <div class="controls">
-      <button class="btn" id="prev" aria-label="Zurückblättern">❤️💍 Zurück</button>
-      <div class="pager" id="pager" aria-live="polite">Seite 1 / 1</div>
-      <button class="btn" id="next" aria-label="Weiterblättern">Weiter ❤️💍</button>
+    <div class="controls" aria-hidden="false">
+      <button id="prev" class="btn" aria-label="Zurückblättern">◀ Zurück</button>
+      <div class="pager" id="pager" aria-live="polite">Seite 0 / 0</div>
+      <button id="next" class="btn" aria-label="Weiterblättern">Weiter ▶</button>
     </div>
   </div>
 
 <script>
 (function(){
-  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Full original letter paragraphs (verbatim from your first file)
-  const letterParagraphs = [
+  // Original text paragraphs (verbatim from your first file)
+  const paragraphs = [
 `❤️ Wenn du diesen Brief öffnest, möchte ich dir etwas sagen, was vielleicht gar nicht oft genug gesagt werden kann ❤️`,
+
 `Ich liebe dich über alles ❤️`,
+
 `💍 Seit du in meinem Leben bist, hat sich für mich so vieles verändert ❤️ Du bist für mich nicht einfach nur meine Freundin, sondern du bist der Mensch geworden, der mir unglaublich viel bedeutet.`,
+
 `❤️ Ich liebe dich für so vieles, dass ich wahrscheinlich niemals alles in Worte fassen könnte 💍 Ich liebe dein Lächeln, dein Lachen, deine Stimme, deine Art und einfach alles, was dich zu dem wunderbaren Menschen macht, der du bist.`,
+
 `❤️ Ich bin so unglaublich froh, dass ich dich habe 💍 Manchmal denke ich einfach darüber nach, wie glücklich ich mich schätzen kann, dich gefunden zu haben ❤️ Es gibt so viele Menschen, doch du bist diejenige, die mein Herz berührt.`,
+
 `💍 Du gibst mir ein Gefühl, das ich nicht einfach beschreiben kann ❤️ Wenn ich bei dir bin, möchte ich manchmal einfach nur die Zeit anhalten, damit dieser Moment niemals aufhört 💍 Deine Nähe bedeutet mir alles.`,
+
 `❤️ Ich möchte auch, dass du eines ganz sicher weißt 💍 Ich würde dich niemals betrügen ❤️ Nicht weil ich Angst davor hätte, dich zu verlieren, sondern weil ich gar nicht anders kann – du bist mein größter Schatz.`,
+
 `❤️ Für mich bist du nicht einfach jemand, mit dem ich gerade zusammen bin 💍 Du bist jemand, mit dem ich mir noch ganz viele wunderschöne Momente wünsche ❤️ Ich möchte mit dir lachen, weinen und wachsen.`,
+
 `💍 Wenn es dir schlecht geht, möchte ich derjenige sein, bei dem du dich sicher fühlst ❤️ Wenn du einen schlechten Tag hast, möchte ich dich zum Lächeln bringen 💍 Wenn du zweifelst, möchte ich dir zeigen, wie wertvoll du bist.`,
+
 `❤️ Ich möchte, dass du dich bei mir geliebt fühlst 💍 Ich möchte, dass du weißt, dass du mir vertrauen kannst und dass ich dich niemals absichtlich verletzen möchte ❤️ Natürlich bin auch ich nicht perfekt, aber mein Wille ist es, für dich zu lernen und besser zu werden.`,
+
 `❤️ Du bist für mich meine Prinzessin 👑💍 Du bist mein Lieblingsmensch ❤️ Du bist diejenige, bei der mein Herz schneller schlägt 💍 Du bist diejenige, deren Nachrichten mich zum Lächeln bringen.`,
+
 `💍 Ich liebe unsere gemeinsamen Momente ❤️ Auch die ganz kleinen 💍 Denn manchmal braucht es gar nichts Besonderes ❤️ Es reicht mir schon, neben dir zu liegen, deine Hand zu halten, dich anzusehen und zu wissen, dass du da bist.`,
+
 `❤️ Und falls du irgendwann einmal vergessen solltest, wie viel du mir bedeutest, dann möchte ich, dass du an diesen Brief zurückdenkst 💍 Lies ihn dir wieder durch und erinnere dich daran, wie sehr du geliebt wirst.`,
+
 `💍 Ich möchte dich nicht nur heute lieben ❤️ Ich möchte dir auch morgen zeigen, wie wichtig du mir bist 💍 Und übermorgen ❤️ Und an jedem weiteren Tag, an dem ich das Glück habe, bei dir zu sein.`,
+
 `❤️ Ich kann dir nicht versprechen, dass jeder Tag perfekt sein wird 💍 Aber ich kann dir versprechen, dass ich dich nicht einfach aufgeben möchte, wenn es einmal schwierig wird ❤️ Ich möchte gemeinsam mit dir Lösungen finden.`,
+
 `❤️ Ich möchte noch so viele schöne Momente mit dir erleben 💍 Noch so viele Umarmungen ❤️ Noch so viele Küsse 💋 Noch so viele gemeinsame Abende 💍 Noch so viele Gespräche bis spät in die Nacht.`,
+
 `❤️ Ich wünsche mir, dass wir irgendwann auf all diese Momente zurückblicken und sagen können, dass wir uns füreinander entschieden haben 💍 Dass wir uns gegenseitig gehalten haben ❤️ Dass wir zusammengewachsen sind.`,
+
 `💍 Du bist ein ganz besonderer Mensch für mich ❤️ Und ich hoffe, dass du niemals daran zweifelst 💍 Ich hoffe, du weißt, dass du geliebt wirst ❤️ Dass du wunderschön bist und dass du mir unendlich viel bedeutest.`,
+
 `❤️ Du bist <strong>meine Prinzessin</strong> 👑  <br>💍 Du bist <strong>mein Lieblingsmensch</strong> ❤️  <br>❤️ Du bist <strong>mein Zuhause</strong> 💍  <br>💍 Du bist <strong>mein Herz</strong> ❤️  <br>❤️ Und du bist diejenige, die ich niemals gegen irgendjemanden eintauschen würde.`,
+
 `❤️ Danke, dass du in mein Leben gekommen bist 💍 Danke für deine Liebe ❤️ Danke für deine Nähe 💍 Danke für jedes Lächeln ❤️ Danke für jede Umarmung 💍 Danke für jeden einzelnen Moment.`,
+
 `💍 Und wenn ich dir mit einem einzigen Satz sagen müsste, was du mir bedeutest, dann wäre es dieser ❤️`,
+
 `<strong>Ich liebe dich über alles, meine Prinzessin 👑❤️💍</strong>`,
+
 `❤️ Ich bin unendlich froh, dich zu haben 💍 Ich werde dich immer wertschätzen ❤️ Ich möchte dich glücklich sehen 💍 Ich möchte für dich da sein ❤️ Und ich möchte dir immer zeigen, wie wichtig du mir bist.`,
+
 `❤️ <strong>Du bist meine Liebe, mein Lieblingsmensch und ein ganz besonderer Teil meines Lebens</strong> ❤️`,
+
 `💍 <strong>Ich liebe dich heute ❤️ Ich liebe dich morgen ❤️ Und ich werde jeden einzelnen Moment mit dir schätzen 💍</strong>`
   ];
 
-  // Fancy SVG illustrations (colored & detailed but small)
-  function svgHeartBouquet(){ return `
-    <svg class="paper-illustration" viewBox="0 0 160 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#ff6b9a"/><stop offset="1" stop-color="#e25a86"/></linearGradient>
-      </defs>
-      <g transform="translate(8,6)" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M56 22 C40 -2 6 2 16 34 C24 60 56 80 56 80 C56 80 88 60 96 34 C106 2 72 -2 56 22 Z" fill="url(#g1)" stroke="#b33a5b" stroke-width="2"/>
-        <g transform="translate(18,50)" stroke="#6b2a42" stroke-width="1.6">
-          <path d="M6 0 C10 10 14 12 22 18" fill="none"/>
-          <path d="M24 0 C30 12 34 18 42 24" fill="none"/>
-        </g>
-      </g>
-    </svg>`; }
-  function svgRoseDetailed(){ return `
-    <svg class="paper-illustration" viewBox="0 0 160 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs><linearGradient id="rgrad" x1="0" x2="1"><stop offset="0" stop-color="#ff8aa3"/><stop offset="1" stop-color="#c93b66"/></linearGradient></defs>
-      <g transform="translate(8,8)" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="80" cy="42" rx="36" ry="30" fill="url(#rgrad)" stroke="#b33a5b" stroke-width="2"/>
-        <path d="M60 36 C66 10 94 10 100 36" fill="none" stroke="#8a304d" stroke-width="2"/>
-        <path d="M80 20 C72 28 88 30 86 40" fill="none" stroke="#8a304d" stroke-width="1.6"/>
-        <path d="M80 64 L80 86" stroke="#6b2a42" stroke-width="3"/>
-        <path d="M80 86 C72 92 88 92 82 86" fill="#6b2a42"/>
-      </g>
-    </svg>`; }
-  function svgDaisyDetailed(){ return `
-    <svg class="paper-illustration" viewBox="0 0 160 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g transform="translate(6,6)" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="76" cy="42" r="8" fill="#ffebc8" stroke="#e09aa6" stroke-width="1.8"/>
-        <g stroke="#e09aa6" stroke-width="1.6" fill="#fff7fb">
-          <ellipse cx="76" cy="16" rx="8" ry="20"/>
-          <ellipse cx="76" cy="68" rx="8" ry="20"/>
-          <ellipse cx="56" cy="42" rx="8" ry="20" transform="rotate(-90 76 42)"/>
-          <ellipse cx="96" cy="42" rx="8" ry="20" transform="rotate(90 76 42)"/>
-          <ellipse cx="60" cy="24" rx="8" ry="20" transform="rotate(-35 76 42)"/>
-          <ellipse cx="92" cy="24" rx="8" ry="20" transform="rotate(35 76 42)"/>
-          <ellipse cx="60" cy="60" rx="8" ry="20" transform="rotate(-125 76 42)"/>
-          <ellipse cx="92" cy="60" rx="8" ry="20" transform="rotate(125 76 42)"/>
-        </g>
-        <path d="M76 50 L76 86" stroke="#6b2a42" stroke-width="2.2"/>
-      </g>
-    </svg>`; }
-  function svgRingsDetailed(){ return `
-    <svg class="paper-illustration" viewBox="0 0 160 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#ffe7f0"/><stop offset="1" stop-color="#ffd1e0"/></linearGradient></defs>
-      <g transform="translate(8,8)" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="44" cy="54" r="20" fill="url(#rg)" stroke="#c9a7b4" stroke-width="2.4"/>
-        <circle cx="74" cy="44" r="24" fill="none" stroke="#d46a8a" stroke-width="3"/>
-        <path d="M74 24 L88 12 L102 26" stroke="#f7c0d6" stroke-width="2.4" fill="none"/>
-        <circle cx="100" cy="26" r="3.4" fill="#fff2f7" stroke="#f4a7c9" stroke-width="1.2"/>
-      </g>
-    </svg>`; }
-
-  function illustrationForIndex(i){
-    const t = i % 4;
-    if(t === 0) return svgHeartBouquet();
-    if(t === 1) return svgRoseDetailed();
-    if(t === 2) return svgDaisyDetailed();
-    return svgRingsDetailed();
-  }
-
-  // Create a page element
-  function makePageElement(index, titleHtml, illustrationHtml){
-    const page = document.createElement('div');
-    page.className = 'page right';
-    page.dataset.index = index+1;
-    page.style.setProperty('--i', index);
-    page.setAttribute('role','button');
-    page.setAttribute('tabindex','0');
-    page.setAttribute('aria-label', `Seite ${index+1}: ${titleHtml}`);
-    page.innerHTML = `
-      <div class="front" aria-hidden="false">
-        <div class="paper-header">
-          ${illustrationHtml}
-          <div class="paper-title">${titleHtml}</div>
-        </div>
-        <div class="paper-content" data-content></div>
-      </div>
-      <div class="back" aria-hidden="true">
-        <div style="text-align:center;color:var(--accent)"><div style="font-size:40px">❤️💍</div><div style="margin-top:8px">Seite ${index+1}</div></div>
-      </div>
-    `;
-    return page;
-  }
-
-  // Build pages with overflow-safe pagination
-  const book = document.getElementById('book');
+  const viewport = document.getElementById('viewport');
+  const pagesEl = document.getElementById('pages');
   const pager = document.getElementById('pager');
-  const prevBtn = document.getElementById('prev');
-  const nextBtn = document.getElementById('next');
-  if(!book) return;
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
 
-  // create first page
-  const pages = [];
-  let currentPage = makePageElement(0, "Für meine Prinzessin", illustrationForIndex(0));
-  book.appendChild(currentPage);
-  pages.push(currentPage);
-  const contentSelector = '[data-content]';
-
-  // Append paragraphs, split to new pages when overflow occurs
-  for(let i=0;i<letterParagraphs.length;i++){
-    const raw = letterParagraphs[i];
-    const p = document.createElement('div');
-    p.className = 'para';
-    p.innerHTML = raw + ` <span class="sep">❤️💍</span>`;
-    let contentBox = pages[pages.length - 1].querySelector(contentSelector);
-    contentBox.appendChild(p);
-
-    // If overflow: move paragraph to next new page
-    if(contentBox.scrollHeight > contentBox.clientHeight){
-      contentBox.removeChild(p);
-      const idx = pages.length;
-      const newPage = makePageElement(idx, `Teil ${idx+1}`, illustrationForIndex(idx));
-      book.appendChild(newPage);
-      pages.push(newPage);
-      newPage.querySelector(contentSelector).appendChild(p);
-      // If the single paragraph itself is taller than a page, allow it (rare)
-      // Continue filling following paragraphs into the new page
-    }
-  }
-
-  // stacking logic
-  const total = pages.length;
-  const pageElements = Array.from(book.querySelectorAll('.page')).reverse();
-
+  let slides = []; // array of page elements
   let current = 0;
-  function render(){
-    pager.textContent = `Seite ${Math.min(current+1,total)} / ${total}`;
-    prevBtn.disabled = current <= 0;
-    nextBtn.disabled = current >= total-1;
 
-    pageElements.forEach((el, idx)=>{
-      const pageIndex = total - idx - 1;
-      if(pageIndex <= current - 1){
-        el.classList.add('flipped');
-        el.querySelector('.front')?.setAttribute('aria-hidden','true');
-        el.querySelector('.back')?.setAttribute('aria-hidden','false');
-      }else{
-        el.classList.remove('flipped');
-        el.querySelector('.front')?.setAttribute('aria-hidden','false');
-        el.querySelector('.back')?.setAttribute('aria-hidden','true');
+  // Build pages by filling one "page box" until overflow, then create new page
+  function buildPages(){
+    // clear existing
+    pagesEl.innerHTML = '';
+    slides = [];
+    current = 0;
+
+    // helper to create page node
+    function makePage(){
+      const page = document.createElement('div');
+      page.className = 'page';
+      const inner = document.createElement('div');
+      inner.className = 'page-inner';
+      // optionally a heading
+      const heading = document.createElement('h2');
+      heading.textContent = 'Für meine Prinzessin';
+      inner.appendChild(heading);
+      page.appendChild(inner);
+      pagesEl.appendChild(page);
+      slides.push(page);
+      return inner; // return content container
+    }
+
+    // create first page
+    let contentBox = makePage();
+
+    for(let i=0;i<paragraphs.length;i++){
+      const paraWrap = document.createElement('p');
+      paraWrap.className = 'para';
+      paraWrap.innerHTML = paragraphs[i] + ' <span style="color:#d25a86;margin-left:8px">❤️💍</span>';
+      contentBox.appendChild(paraWrap);
+
+      // after inserting, check overflow
+      // allow small tolerance (1px) due to rounding
+      if(contentBox.scrollHeight - contentBox.clientHeight > 1){
+        // overflowed: remove paragraph and create new page and append there
+        contentBox.removeChild(paraWrap);
+        contentBox = makePage();
+        contentBox.appendChild(paraWrap);
+        // if this single paragraph still overflows (rare, extremely long), we keep it and allow scroll inside page
       }
-      if(pageIndex === current) el.setAttribute('tabindex','0');
-      else el.setAttribute('tabindex','-1');
-    });
+    }
+
+    // After building, set width of pages container and call render
+    pagesEl.style.width = (slides.length * 100) + '%';
+    slides.forEach(s => s.style.width = (100 / slides.length) + '%'); // not strictly necessary
+    updatePager();
+    showPage(0, false);
   }
 
-  function go(n){
-    current = Math.max(0, Math.min(total-1, n));
-    render();
-    if(!prefersReduced){
-      // gentle decorative floats
-      for(let i=0;i<10;i++) setTimeout(createFloating, i*60);
-    }
-    // small vibration hint on mobile (if supported) — subtle, optional
-    if('vibrate' in navigator && window.innerWidth < 900){
-      try{ navigator.vibrate && navigator.vibrate(20); }catch(e){}
-    }
+  function updatePager(){
+    pager.textContent = `Seite ${current+1} / ${slides.length || 1}`;
+    prev.disabled = current <= 0;
+    next.disabled = current >= (slides.length - 1);
   }
 
-  // Click / touch behaviour: on mobile tap advances; on desktop left/right half flips back/forward
-  book.addEventListener('click', (e)=>{
-    const rect = book.getBoundingClientRect();
+  // show page index (translate)
+  function showPage(index, animated = true){
+    if(!slides.length) return;
+    current = Math.max(0, Math.min(slides.length - 1, index));
+    const percent = -(100 * current);
+    if(!animated || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      pagesEl.style.transition = 'none';
+    } else {
+      pagesEl.style.transition = '';
+    }
+    pagesEl.style.transform = `translateX(${percent}%)`;
+    // small timeout to restore transition if we turned it off
+    if(!animated){
+      setTimeout(()=>{ pagesEl.style.transition = ''; }, 20);
+    }
+    updatePager();
+    // focus page for screen readers / keyboard
+    const pageEl = slides[current];
+    if(pageEl) pageEl.querySelector('.page-inner')?.focus?.();
+  }
+
+  // navigation handlers
+  prev.addEventListener('click', ()=> showPage(current - 1));
+  next.addEventListener('click', ()=> showPage(current + 1));
+
+  // click on left/right half area to nav (on larger screens)
+  viewport.addEventListener('click', (e)=>{
+    const rect = viewport.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    if(window.matchMedia('(max-width:900px)').matches){
-      go(current + 1);
+    if(window.matchMedia('(max-width:640px)').matches){
+      // on small screens tapping anywhere advances (like flipping a page)
+      showPage(current + 1);
       return;
     }
-    if(x < rect.width/2) go(current - 1);
-    else go(current + 1);
+    if(x < rect.width / 2) showPage(current - 1);
+    else showPage(current + 1);
   });
 
-  // keyboard: arrows / home / end
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'ArrowRight' || e.key === 'Right'){ go(current + 1); }
-    else if(e.key === 'ArrowLeft' || e.key === 'Left'){ go(current - 1); }
-    else if(e.key === 'Home'){ go(0); }
-    else if(e.key === 'End'){ go(total - 1); }
-  });
-
-  prevBtn.addEventListener('click', ()=>go(current - 1));
-  nextBtn.addEventListener('click', ()=>go(current + 1));
-
-  // touch swipe
-  let touchStartX = null;
-  book.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) touchStartX = e.touches[0].clientX; }, {passive:true});
-  book.addEventListener('touchend', (e)=>{
-    if(touchStartX == null) return;
+  // swipe support
+  let startX = null;
+  viewport.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) startX = e.touches[0].clientX; }, {passive:true});
+  viewport.addEventListener('touchend', (e)=>{
+    if(startX == null) return;
     const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : null;
     if(endX == null) return;
-    const dx = endX - touchStartX;
+    const dx = endX - startX;
     if(Math.abs(dx) > 40){
-      if(dx < 0) go(current + 1);
-      else go(current - 1);
+      if(dx < 0) showPage(current + 1);
+      else showPage(current - 1);
     }
-    touchStartX = null;
+    startX = null;
   });
 
-  // floating decorations (hearts/rings)
-  function createFloating(){
-    if(prefersReduced) return;
-    const emojis = ['❤️','💕','💗','💖','💞','💓','💘','💝','💍','❤️💍'];
-    const el = document.createElement('div');
-    el.className = 'floating';
-    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    el.style.left = (6 + Math.random() * 88) + 'vw';
-    const size = 14 + Math.random() * 28;
-    el.style.fontSize = size + 'px';
-    el.style.animationDuration = (3 + Math.random() * 5) + 's';
-    el.style.setProperty('--x', ((Math.random() - 0.5) * 160) + 'px');
-    el.setAttribute('aria-hidden','true');
-    document.body.appendChild(el);
-    el.addEventListener('animationend', ()=>{ if(el && el.parentNode) el.parentNode.removeChild(el); });
-  }
+  // keyboard
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight') showPage(current + 1);
+    else if(e.key === 'ArrowLeft') showPage(current - 1);
+    else if(e.key === 'Home') showPage(0);
+    else if(e.key === 'End') showPage((slides.length - 1));
+  });
 
-  // initial decorative floats (gentle)
-  if(!prefersReduced){
-    for(let i=0;i<6;i++) setTimeout(createFloating, i * 420);
-    const steady = setInterval(createFloating, 2200);
-    setTimeout(()=>clearInterval(steady), 24000);
-    window.addEventListener('beforeunload', ()=>clearInterval(steady));
-  }
+  // rebuild on resize/orientation change, debounce to avoid thrash
+  let resizeTimer = null;
+  window.addEventListener('resize', ()=>{ clearTimeout(resizeTimer); resizeTimer = setTimeout(()=>{ buildPages(); }, 220); });
 
-  // init
-  go(0);
+  // initial build
+  buildPages();
 
-  // screen reader live region
-  const live = document.createElement('div');
-  live.className = 'visually-hidden';
-  live.setAttribute('aria-live','polite');
-  document.body.appendChild(live);
-  const obs = new MutationObserver(()=>{ live.textContent = `Seite ${Math.min(current+1,total)} von ${total}`; });
-  obs.observe(pager, {childList:true, characterData:true, subtree:true});
+  // expose for debugging (optional)
+  window._book = { rebuild: buildPages, showPage };
 
 })();
 </script>
+
 </body>
 </html>
