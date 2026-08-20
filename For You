@@ -1,0 +1,190 @@
+index.html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meine Prinzessin ❤️❤️💍</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;overflow-x:hidden;
+ font-family:Georgia,serif;color:#71334d;
+ background:linear-gradient(135deg,#ffd9e8,#f5a9c9,#ffe1ed);
+}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px}
+.intro{text-align:center}
+h1{font-size:clamp(30px,8vw,52px);color:#8d3158}
+.crown{font-size:50px}
+.hint{font-family:Arial;color:#8d4965}
+.envelope{
+ position:relative;width:min(350px,85vw);height:230px;
+ margin:auto;cursor:pointer;filter:drop-shadow(0 15px 18px #9a527055)
+}
+.back{
+ position:absolute;inset:0;background:#fff1f7;
+ border:2px solid #efaac5;border-radius:16px;
+}
+.flap{
+ position:absolute;z-index:3;top:0;left:0;width:100%;height:58%;
+ background:linear-gradient(145deg,#ffe9f2,#f5b4ce);
+ clip-path:polygon(0 0,100% 0,50% 100%);
+ transform-origin:top;
+ transition:1s;
+}
+.letter{
+ position:absolute;z-index:2;left:8%;right:8%;bottom:5%;height:82%;
+ background:white;border-radius:12px;padding:20px;
+ box-shadow:0 8px 20px #71334d22;
+}
+.seal{
+ position:absolute;z-index:5;left:50%;top:55%;
+ transform:translate(-50%,-50%);
+ width:62px;height:62px;border-radius:50%;
+ display:grid;place-items:center;background:#df5d91;color:white;font-size:27px;
+ transition:.5s
+}
+.open .flap{transform:rotateX(175deg)}
+.open .letter{transform:translateY(-70px)}
+.open .seal{opacity:0}
+.message{display:none;max-width:760px;width:100%}
+.show .intro{display:none}
+.show .message{display:block;animation:in 1s}
+.paper{
+ background:#fffdfdF2;border-radius:24px;padding:35px;
+ box-shadow:0 20px 50px #71334d33
+}
+h2{text-align:center;color:#8d3158;font-size:32px}
+.text{font-size:18px;line-height:1.9}
+.end{text-align:center;font-size:23px;color:#8d3158;margin-top:25px}
+.heart{
+ position:fixed;top:-40px;z-index:20;pointer-events:none;
+ animation:fall linear forwards
+}
+@keyframes fall{
+ from{transform:translateY(-40px) rotate(0);opacity:0}
+ 10%{opacity:1}
+ to{transform:translateY(110vh) translateX(var(--x)) rotate(360deg);opacity:0}
+}
+@keyframes in{
+ from{opacity:0;transform:translateY(25px)}
+ to{opacity:1;transform:none}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap" id="page">
+
+<section class="intro">
+<div class="crown">👑</div>
+<h1>Meine Prinzessin ❤️❤️💍</h1>
+
+<div class="envelope" id="env">
+<div class="back"></div>
+<div class="letter">❤️💍❤️</div>
+<div class="flap"></div>
+<div class="seal">❤️</div>
+</div>
+
+<p class="hint">💌 Drück auf den Brief, meine Prinzessin 💌</p>
+</section>
+
+<section class="message">
+<div class="paper">
+
+<h2>Für meine Prinzessin 👑❤️</h2>
+
+<div class="text">
+
+❤️ Wenn du diesen Brief öffnest, möchte ich dir etwas sagen, was vielleicht gar nicht oft genug gesagt werden kann ❤️
+
+<strong>Ich liebe dich über alles ❤️</strong>
+
+💍 Seit du in meinem Leben bist, hat sich für mich so vieles verändert ❤️ Du bist für mich nicht einfach nur meine Freundin, sondern du bist der Mensch geworden, der mir unglaublich viel bedeutet 💍 Du bist die Person, an die ich denke, wenn ich morgens aufwache, und die Person, die mir abends noch durch den Kopf geht ❤️
+
+❤️ Ich liebe dich für so vieles, dass ich wahrscheinlich niemals alles in Worte fassen könnte 💍 Ich liebe dein Lächeln, dein Lachen, deine Stimme, deine Art und einfach alles, was dich zu der wundervollen Person macht, die du bist ❤️ Ich liebe auch deine kleinen Eigenheiten und die Dinge, die vielleicht andere gar nicht bemerken würden 💍 Für mich machen genau diese Dinge dich einzigartig ❤️
+
+❤️ Ich bin so unglaublich froh, dass ich dich habe 💍 Manchmal denke ich einfach darüber nach, wie glücklich ich mich schätzen kann, dich gefunden zu haben ❤️ Es gibt so viele Menschen auf dieser Welt und trotzdem bist genau du diejenige, die mein Herz berührt hat 💍 Und dafür bin ich jeden einzelnen Tag dankbar ❤️
+
+💍 Du gibst mir ein Gefühl, das ich nicht einfach beschreiben kann ❤️ Wenn ich bei dir bin, möchte ich manchmal einfach nur die Zeit anhalten, damit dieser Moment niemals aufhört 💍 Deine Nähe bedeutet mir mehr, als du vielleicht denkst ❤️ Eine Umarmung von dir kann meinen ganzen Tag besser machen und ein einziges Lächeln von dir kann mir sofort ein Lächeln ins Gesicht zaubern ❤️
+
+❤️ Ich möchte auch, dass du eines ganz sicher weißt 💍 <strong>Ich würde dich niemals betrügen</strong> ❤️ Nicht weil ich Angst davor hätte, dich zu verlieren, sondern weil ich gar keinen anderen Menschen möchte 💍 Wenn ich dich an meiner Seite habe, brauche ich niemand anderen ❤️ Mein Herz hat sich für dich entschieden und ich möchte, dass es auch bei dir bleibt 💍
+
+❤️ Für mich bist du nicht einfach jemand, mit dem ich gerade zusammen bin 💍 Du bist jemand, mit dem ich mir noch ganz viele wunderschöne Momente wünsche ❤️ Ich möchte mit dir lachen, herumalbern, kuscheln, schöne Tage verbringen und auch gemeinsam durch die schwierigen Zeiten gehen 💍 Ich möchte für dich da sein, wenn du glücklich bist, aber genauso für dich da sein, wenn du traurig bist ❤️
+
+💍 Wenn es dir schlecht geht, möchte ich derjenige sein, bei dem du dich sicher fühlst ❤️ Wenn du einen schlechten Tag hast, möchte ich dich zum Lächeln bringen 💍 Wenn du zweifelst, möchte ich dich daran erinnern, wie wundervoll du bist ❤️ Und wenn du glücklich bist, möchte ich mich mit dir freuen und dieses Glück mit dir teilen 💍
+
+❤️ Ich möchte, dass du dich bei mir geliebt fühlst 💍 Ich möchte, dass du weißt, dass du mir vertrauen kannst und dass ich dich niemals absichtlich verletzen möchte ❤️ Natürlich bin auch ich nicht perfekt und vielleicht mache ich manchmal Fehler 💍 Aber eines wird sich niemals ändern ❤️ <strong>Meine Liebe zu dir und der Wunsch, dich glücklich zu sehen</strong>
+
+❤️ Du bist für mich meine Prinzessin 👑💍 Du bist mein Lieblingsmensch ❤️ Du bist diejenige, bei der mein Herz schneller schlägt 💍 Du bist diejenige, deren Nachrichten mich zum Lächeln bringen ❤️ Du bist diejenige, die ich vermisse, wenn sie nicht bei mir ist 💍 Und du bist diejenige, die ich am liebsten ganz nah bei mir habe ❤️
+
+💍 Ich liebe unsere gemeinsamen Momente ❤️ Auch die ganz kleinen 💍 Denn manchmal braucht es gar nichts Besonderes ❤️ Es reicht mir schon, neben dir zu liegen, deine Hand zu halten, dich anzusehen oder einfach mit dir zu reden 💍 Genau diese kleinen Momente bedeuten mir unglaublich viel ❤️
+
+❤️ Und falls du irgendwann einmal vergessen solltest, wie viel du mir bedeutest, dann möchte ich, dass du an diesen Brief zurückdenkst 💍 Lies ihn dir wieder durch und erinnere dich daran, dass irgendwo ein Mensch ist, der dich von ganzem Herzen liebt ❤️
+
+💍 Ich möchte dich nicht nur heute lieben ❤️ Ich möchte dir auch morgen zeigen, wie wichtig du mir bist 💍 Und übermorgen ❤️ Und an jedem weiteren Tag, an dem ich das Glück haben darf, dich an meiner Seite zu haben 💍
+
+❤️ Ich kann dir nicht versprechen, dass jeder Tag perfekt sein wird 💍 Aber ich kann dir versprechen, dass ich dich nicht einfach aufgeben möchte, wenn es einmal schwierig wird ❤️ Ich möchte gemeinsam mit dir durch gute und schlechte Zeiten gehen 💍 Gemeinsam lachen, gemeinsam weinen, gemeinsam wachsen und gemeinsam immer wieder neue Erinnerungen schaffen ❤️
+
+❤️ Ich möchte noch so viele schöne Momente mit dir erleben 💍 Noch so viele Umarmungen ❤️ Noch so viele Küsse 💋 Noch so viele gemeinsame Abende 💍 Noch so viele Gespräche bis spät in die Nacht ❤️ Noch so viele Tage, an denen wir zusammen lachen, bis uns der Bauch wehtut 💍
+
+❤️ Ich wünsche mir, dass wir irgendwann auf all diese Momente zurückblicken und sagen können, dass wir uns füreinander entschieden haben 💍 Dass wir uns gegenseitig gehalten haben ❤️ Dass wir uns nie aufgegeben haben 💍 Und dass unsere Liebe mit jedem gemeinsamen Erlebnis noch stärker geworden ist ❤️
+
+💍 Du bist ein ganz besonderer Mensch für mich ❤️ Und ich hoffe, dass du niemals daran zweifelst 💍 Ich hoffe, du weißt, dass du geliebt wirst ❤️ Dass du wunderschön bist 💍 Dass du wertvoll bist ❤️ Und dass du für mich niemals einfach irgendein Mensch sein wirst 💍
+
+❤️ Du bist <strong>meine Prinzessin</strong> 👑  
+💍 Du bist <strong>mein Lieblingsmensch</strong> ❤️  
+❤️ Du bist <strong>mein Zuhause</strong> 💍  
+💍 Du bist <strong>mein Herz</strong> ❤️  
+❤️ Und du bist diejenige, die ich niemals gegen irgendjemanden eintauschen würde 💍
+
+❤️ Danke, dass du in mein Leben gekommen bist 💍 Danke für deine Liebe ❤️ Danke für deine Nähe 💍 Danke für jedes Lächeln ❤️ Danke für jede Umarmung 💍 Danke für jeden einzelnen Moment, den ich mit dir verbringen darf ❤️
+
+💍 Und wenn ich dir mit einem einzigen Satz sagen müsste, was du mir bedeutest, dann wäre es dieser ❤️
+
+<strong>Ich liebe dich über alles, meine Prinzessin 👑❤️💍</strong>
+
+❤️ Ich bin unendlich froh, dich zu haben 💍 Ich werde dich immer wertschätzen ❤️ Ich möchte dich glücklich sehen 💍 Ich möchte für dich da sein ❤️ Und ich möchte dir immer wieder zeigen, dass mein Herz sich für dich entschieden hat 💍
+
+❤️ <strong>Du bist meine Liebe, mein Lieblingsmensch und ein ganz besonderer Teil meines Lebens</strong> ❤️
+
+💍 <strong>Ich liebe dich heute ❤️ Ich liebe dich morgen ❤️ Und ich werde jeden einzelnen Moment mit dir schätzen 💍</strong>
+
+</div>
+
+<div class="end">Für immer dein ❤️💍</div>
+
+</div>
+</section>
+</div>
+
+<script>
+const env=document.getElementById("env");
+const page=document.getElementById("page");
+
+function heart(){
+ const h=document.createElement("div");
+ h.className="heart";
+ h.textContent=["❤️","💕","💗","💖","💞","💓","💘","💝","💍"][Math.floor(Math.random()*9)];
+ h.style.left=Math.random()*100+"vw";
+ h.style.fontSize=16+Math.random()*22+"px";
+ h.style.animationDuration=4+Math.random()*5+"s";
+ h.style.setProperty("--x",(Math.random()-.5)*180+"px");
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),10000);
+}
+
+env.onclick=()=>{
+ env.classList.add("open");
+ setTimeout(()=>{
+   page.classList.add("show");
+   for(let i=0;i<25;i++) setTimeout(heart,i*80);
+   const timer=setInterval(heart,350);
+   setTimeout(()=>clearInterval(timer),18000);
+ },1000);
+};
+</script>
+
+</body>
+</html>
