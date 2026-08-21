@@ -527,7 +527,7 @@
       <div class="hero-inner">
         <div class="heart" aria-hidden="true">💗</div>
         <h1>Unsere kleine Geschichte</h1>
-        <p>Von einer Snapchat-Anfrage über nächtliche Telefonate, Rosen in Zwickau und unseren ersten Kuss ... bis zu einem ganz besonderen Moment. ♡</p>
+        <p>Von einer Snapchat-Anfrage über WhatsApp, nächtliche Telefonate, Rosen in Zwickau ... bis zu einem ganz besonderen Moment. ♡</p>
         <button type="button" id="startBtn" class="start">Unsere Geschichte beginnen ✨</button>
       </div>
     </section>
@@ -558,35 +558,25 @@
     <section class="final-card" id="finalCard" aria-labelledby="finalTitle">
       <div class="ring" aria-hidden="true">💍</div>
 
-      <h2 id="finalTitle">Jetzt fehlt nur noch eine Sache ...</h2>
+      <h2 id="finalTitle">Ich weiß, was wichtig ist...</h2>
 
       <p class="final-message">
-        Ich habe dir unsere kleinen Erinnerungen gezeigt.
+        Wir haben schon so viel zusammen erlebt.
         <br><br>
-        Aber eigentlich gibt es eine Sache, die ich schon die ganze Zeit weiß:
+        2 Jahre sind vorbei, und es fühlt sich wie kaum noch Zeit, weil jeder Moment mit dir so wertvoll ist.
         <br><br>
-        <strong>Du bist für mich die Richtige.</strong>
+        Ich habe viel überlegt, viel durchdacht ...
         <br><br>
-        Jetzt schieb den Regler so weit, wie deine Liebe reicht. ❤️
+        Und ich weiß jetzt: <strong>Du bist die Einzige, die ich will.</strong>
+        <br><br>
+        Deshalb: Bist du bereit, unser nächstes Kapitel zu schreiben?
       </p>
-
-      <div class="slider-box">
-        <div class="percent" id="percent" aria-live="polite" aria-atomic="true">0%</div>
-
-        <input id="loveSlider" type="range" min="0" max="100000000" value="0" step="1"
-               aria-label="Liebesregler – schiebe nach rechts" aria-valuemin="0" aria-valuemax="100000000" aria-valuenow="0">
-
-        <div class="range-label">
-          <span>ein bisschen ♡</span>
-          <span>100.000.000%</span>
-        </div>
-      </div>
 
       <div class="secret" id="secret" role="region" aria-label="Heiratsantrag">
         <div class="big-ring">💍</div>
         <h3>Willst du meine Verlobte sein?</h3>
         <p>
-          Und wenn du möchtest, soll aus unserer Geschichte unser nächstes großes Kapitel werden. ❤️
+          Für immer. Mit dir, an deiner Seite, in unserer Geschichte. ❤️
           <br><br>
           Du hast drei Möglichkeiten ... aber eine davon ist ziemlich schüchtern. 😏
         </p>
@@ -615,52 +605,60 @@
     ========================= */
     const memories = [
       { 
-        chapter: "Kapitel 1 · Der Anfang", 
-        question: "Weißt du noch, wie aus einem einfachen Snapchat-Add langsam mehr wurde?", 
-        hint: "Ich habe dich hinzugefügt, du hast mich akzeptiert – und irgendwann waren wir ständig online.",
-        answers: ["Du hast mich gleich akzeptiert 💕", "Wir haben täglich gechattet ✨", "Es war Liebe auf den ersten Blick 😍"],
-        image: "https://via.placeholder.com/400x300?text=Kapitel+1",
-        caption: "Unser Anfang ♡"
+        chapter: "Kapitel 1 · Snapchat", 
+        question: "Wie hat alles angefangen?", 
+        hint: "Mit einer einfachen Anfrage auf Snapchat ... und dann konnten wir nicht mehr aufhören zu schreiben.",
+        answers: ["Du wolltest einfach mit mir chatten 💬", "Ich wusste sofort, dass du speziell bist ✨", "Es war Liebe auf den ersten Blick 😍"],
+        image: "https://via.placeholder.com/400x300?text=Kapitel+1+Snapchat",
+        caption: "Unser Anfang auf Snapchat ♡"
       },
       { 
-        chapter: "Kapitel 2 · Du wolltest meine Nummer", 
-        question: "Was glaubst du, war der Moment, an dem es sich nicht mehr nur nach Snapchat angefühlt hat?", 
-        hint: "Irgendwann hast du mich nach meiner Nummer gefragt – und mein Herz ist höher gesprungen als je zuvor.",
-        answers: ["Du wolltest mich kennenlernen 📞", "Du hast mir von dir erzählt 💬", "Es war einfach der richtige Moment ⏰"],
-        image: "https://via.placeholder.com/400x300?text=Kapitel+2",
-        caption: "Unsere Nummern 💌"
+        chapter: "Kapitel 2 · Snapchat wird intensiver", 
+        question: "Wie lange konnten wir am Anfang schreiben?", 
+        hint: "Wir waren ständig online, die Gespräche wurden länger und tiefer. Stunden über Stunden.",
+        answers: ["Wir telefonierten immer länger 📞", "Jede Minute mit dir war kostbar ✨", "Ich wollte dich immer besser kennenlernen 💕"],
+        image: "https://via.placeholder.com/400x300?text=Kapitel+2+Snapchat+Intensiv",
+        caption: "Unsere intensiven Snapchat-Nächte ♡"
       },
       { 
-        chapter: "Kapitel 3 · Zwickau", 
-        question: "Erinnerst du dich an unser erstes Treffen in Zwickau?", 
-        hint: "Ich war so nervös, dass ich dir Rosen mitgebracht habe. Wir sind zum Schwanenteich gegangen.",
-        answers: ["Die Rosen waren wunderschön 🌹", "Ich werde diesen Tag nie vergessen 💕", "Du warst noch nervöser als ich 😊"],
-        image: "https://via.placeholder.com/400x300?text=Kapitel+3",
-        caption: "Unser erstes Treffen 🌹"
+        chapter: "Kapitel 3 · WhatsApp", 
+        question: "Was war der Moment, als wir zu WhatsApp wechselten?", 
+        hint: "Irgendwann wolltest du meine Nummer. Snapchat reichte nicht mehr – wir wollten immer näher beieinander sein.",
+        answers: ["Du fragtest mich nach meiner Nummer 📱", "Es war einfach der nächste Schritt 💬", "Alles wurde noch näher und persönlicher 💖"],
+        image: "https://via.placeholder.com/400x300?text=Kapitel+3+WhatsApp",
+        caption: "WhatsApp – näher beieinander 💌"
       },
       { 
-        chapter: "Kapitel 4 · Unser Zuhause", 
-        question: "Wo wollten wir später einmal zusammen hinziehen?", 
-        hint: "Wir haben uns irgendwann hingesetzt und uns ausgemalt, wo unser gemeinsames Zuhause sein könnte.",
-        answers: ["Irgendwo an der Küste 🏖️", "In den Bergen 🏔️", "Dort, wo unsere Herzen sind 💕"],
-        image: "https://via.placeholder.com/400x300?text=Kapitel+4",
-        caption: "Unser Traum-Zuhause 🏠"
-      },
-      { 
-        chapter: "Kapitel 5 · Mein Sperrbildschirm", 
-        question: "Was glaubst du, warum ich dich auf meinem Sperrbildschirm hatte?", 
-        hint: "Weil ich dich schon damals so sehr in meinem Leben haben wollte.",
-        answers: ["Du hast mich jeden Tag vermisst 💭", "Ich war dir schon damals wichtig 💖", "Du dachtest ständig an mich 🥰"],
-        image: "https://via.placeholder.com/400x300?text=Kapitel+5",
-        caption: "Für immer bei mir 📱"
-      },
-      { 
-        chapter: "Kapitel 6 · Stundenlang wir", 
-        question: "Wie lange konnten wir am Anfang eigentlich telefonieren, ohne dass uns langweilig wurde?", 
-        hint: "Manchmal wurden aus einem kurzen Telefonat ganze Nächte – wir konnten einfach nicht aufhören zu reden.",
-        answers: ["Wir telefonierten bis zum Morgengrauen 🌙", "Stundenlang und immer noch nicht genug 💬", "Bis unsere Ohren weh taten 😄"],
-        image: "https://via.placeholder.com/400x300?text=Kapitel+6",
+        chapter: "Kapitel 4 · Telefonate & Sperrbildschirm", 
+        question: "Wie lange telefonierten wir jede Nacht?", 
+        hint: "Wir wollten unsere Stimmen hören. Stundenlang telefonieren wurde normal für uns. Und du warst bald mein Sperrbildschirm ...",
+        answers: ["Bis zum Morgengrauen 🌙", "Stundenlang – wir konnten nicht aufhören 💬", "Du warst mir schon damals so wichtig 🥰"],
+        image: "https://via.placeholder.com/400x300?text=Kapitel+4+Telefonate",
         caption: "Unsere Telefon-Nächte 💕"
+      },
+      { 
+        chapter: "Kapitel 5 · Zwickau – Unser erstes Treffen", 
+        question: "Erinnerst du dich an unser erstes Treffen in Zwickau?", 
+        hint: "Ich war so nervös, dass ich dir Rosen mitgebracht habe. Wir sind zum Schwanenteich gegangen – unser erster Kuss ...",
+        answers: ["Die Rosen waren wunderschön 🌹", "Ich werde diesen Tag nie vergessen 💕", "Du warst noch nervöser als ich 😊"],
+        image: "https://via.placeholder.com/400x300?text=Kapitel+5+Zwickau",
+        caption: "Unser erstes Treffen – der Anfang von allem 🌹"
+      },
+      { 
+        chapter: "Kapitel 6 · Bei dir", 
+        question: "Wie war es, das erste Mal bei dir zu Hause zu sein?", 
+        hint: "Ein neues Kapitel. Plötzlich waren wir nicht mehr nur Worte auf einem Bildschirm – wir waren zusammen.",
+        answers: ["Du hast mich in dein Zuhause eingeladen 🏠", "Alles wurde noch realer 💕", "Ich wusste, das ist für immer 🥰"],
+        image: "https://via.placeholder.com/400x300?text=Kapitel+6+Bei+Dir",
+        caption: "Bei dir – ein neuer Anfang 🏠"
+      },
+      { 
+        chapter: "Kapitel 7 · 2 Jahre später", 
+        question: "Viel ist passiert in diesen 2 Jahren ...", 
+        hint: "Zeit verging so schnell. Wir haben gelacht, gelitten, wir sind zusammen gewachsen. Und jetzt weiß ich: Es gibt nur eine Sache, die ich sicher bin.",
+        answers: ["Jeder Moment mit dir ist wertvoll 💖", "Du bist alles, was ich brauche 💕", "Ich will nur noch mit dir zusammen sein 🥹"],
+        image: "https://via.placeholder.com/400x300?text=Kapitel+7+2+Jahre",
+        caption: "2 Jahre voller Liebe 💍"
       }
     ];
 
@@ -803,22 +801,25 @@
     /* =========================
        Slider (100.000.000%) mit ARIA
     ========================= */
-    loveSlider.addEventListener('input', () => {
-      const value = safeNumber(loveSlider.value);
-      loveSlider.setAttribute('aria-valuenow', value);
-      
-      // Formatierte Anzeige
-      const formatted = value.toLocaleString('de-DE');
-      const pct = Math.round((value / 100000000) * 100);
-      percentEl.textContent = formatted + '%';
-      
-      if (value === 100000000){
-        secret.classList.add('show');
-        setTimeout(() => secret.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
-      } else {
-        secret.classList.remove('show');
-      }
-    });
+    const loveSlider = document.getElementById('loveSlider');
+    if (loveSlider) {
+      loveSlider.addEventListener('input', () => {
+        const value = safeNumber(loveSlider.value);
+        loveSlider.setAttribute('aria-valuenow', value);
+        
+        // Formatierte Anzeige
+        const formatted = value.toLocaleString('de-DE');
+        const pct = Math.round((value / 100000000) * 100);
+        percentEl.textContent = formatted + '%';
+        
+        if (value === 100000000){
+          secret.classList.add('show');
+          setTimeout(() => secret.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
+        } else {
+          secret.classList.remove('show');
+        }
+      });
+    }
 
     /* =========================
        JA-Funktion
@@ -931,7 +932,9 @@
        Initial Setup
     ========================= */
     progressBar.setAttribute('aria-valuenow', 0);
-    loveSlider.setAttribute('aria-valuenow', 0);
+    if (loveSlider) {
+      loveSlider.setAttribute('aria-valuenow', 0);
+    }
     percentEl.textContent = '0%';
 
   </script>
