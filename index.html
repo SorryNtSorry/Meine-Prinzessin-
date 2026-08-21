@@ -245,7 +245,6 @@
       transform:translateY(-1px); 
     }
 
-    /* memory image reserve Platz um CLS zu vermeiden */
     .memory{ 
       display:none; 
       margin-top:22px; 
@@ -324,6 +323,11 @@
       padding:19px 14px 16px; 
       border-radius:24px; 
       background:rgba(255,255,255,.62); 
+      display:none;
+    }
+
+    .slider-box.show{
+      display:block;
     }
     
     .percent{ 
@@ -560,7 +564,7 @@
 
       <h2 id="finalTitle">Ich weiß, was wichtig ist...</h2>
 
-      <p class="final-message">
+      <p class="final-message" id="finalMessage">
         Wir haben schon so viel zusammen erlebt.
         <br><br>
         2 Jahre sind vorbei, und es fühlt sich wie kaum noch Zeit, weil jeder Moment mit dir so wertvoll ist.
@@ -571,6 +575,18 @@
         <br><br>
         Deshalb: Bist du bereit, unser nächstes Kapitel zu schreiben?
       </p>
+
+      <div class="slider-box" id="sliderBox">
+        <div class="percent" id="percent" aria-live="polite" aria-atomic="true">0%</div>
+
+        <input id="loveSlider" type="range" min="0" max="100000000" value="0" step="1"
+               aria-label="Liebesregler – schiebe nach rechts" aria-valuemin="0" aria-valuemax="100000000" aria-valuenow="0">
+
+        <div class="range-label">
+          <span>ein bisschen ♡</span>
+          <span>100.000.000%</span>
+        </div>
+      </div>
 
       <div class="secret" id="secret" role="region" aria-label="Heiratsantrag">
         <div class="big-ring">💍</div>
@@ -601,7 +617,7 @@
   <script>
     /* =========================
        EURE GESCHICHTE (Daten)
-       WICHTIG: Ersetze die image-URLs mit deinen eigenen Bildern!
+       ERSETZE DIE IMAGE-URLs MIT DEINEN EIGENEN BILDERN!
     ========================= */
     const memories = [
       { 
@@ -680,6 +696,7 @@
     const progressBar = document.getElementById('progressBar');
     const finalCard = document.getElementById('finalCard');
     const loveSlider = document.getElementById('loveSlider');
+    const sliderBox = document.getElementById('sliderBox');
     const percentEl = document.getElementById('percent');
     const secret = document.getElementById('secret');
     const proposalButtons = document.getElementById('proposalButtons');
@@ -778,6 +795,7 @@
       if (current >= memories.length){
         storyArea.classList.add('hidden');
         finalCard.classList.add('show');
+        sliderBox.classList.add('show');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
@@ -801,25 +819,21 @@
     /* =========================
        Slider (100.000.000%) mit ARIA
     ========================= */
-    const loveSlider = document.getElementById('loveSlider');
-    if (loveSlider) {
-      loveSlider.addEventListener('input', () => {
-        const value = safeNumber(loveSlider.value);
-        loveSlider.setAttribute('aria-valuenow', value);
-        
-        // Formatierte Anzeige
-        const formatted = value.toLocaleString('de-DE');
-        const pct = Math.round((value / 100000000) * 100);
-        percentEl.textContent = formatted + '%';
-        
-        if (value === 100000000){
-          secret.classList.add('show');
-          setTimeout(() => secret.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
-        } else {
-          secret.classList.remove('show');
-        }
-      });
-    }
+    loveSlider.addEventListener('input', () => {
+      const value = safeNumber(loveSlider.value);
+      loveSlider.setAttribute('aria-valuenow', value);
+      
+      // Formatierte Anzeige
+      const formatted = value.toLocaleString('de-DE');
+      percentEl.textContent = formatted + '%';
+      
+      if (value === 100000000){
+        secret.classList.add('show');
+        setTimeout(() => secret.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
+      } else {
+        secret.classList.remove('show');
+      }
+    });
 
     /* =========================
        JA-Funktion
@@ -932,11 +946,9 @@
        Initial Setup
     ========================= */
     progressBar.setAttribute('aria-valuenow', 0);
-    if (loveSlider) {
-      loveSlider.setAttribute('aria-valuenow', 0);
-    }
+    loveSlider.setAttribute('aria-valuenow', 0);
     percentEl.textContent = '0%';
 
   </script>
 </body>
-</html>
+</html>6
